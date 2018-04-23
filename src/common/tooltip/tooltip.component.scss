@@ -3,21 +3,15 @@ $tooltip-color: #fff;
 $tooltip-caret-bg: $tooltip-bg;
 $tooltip-border: transparent;
 $tooltip-spacing: 10px;
-
 $popover-bg: #fff;
 $popover-color: #060709;
 $popover-caret-bg: $popover-bg;
 $popover-border: #72809b;
 $popover-spacing: 10px;
-
 $shadow-key-umbra-opacity: 0.2;
 $shadow-key-penumbra-opacity: 0.14;
 $shadow-ambient-shadow-opacity: 0.12;
-$shadow:
-  0 1px 3px 0 rgba(0, 0, 0, $shadow-key-umbra-opacity),
-  0 1px 1px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity),
-  0 2px 1px -1px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
-
+$shadow: 0 1px 3px 0 rgba(0, 0, 0, $shadow-key-umbra-opacity), 0 1px 1px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0 2px 1px -1px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
 
 .ngx-charts-tooltip-content {
   position: fixed;
@@ -28,6 +22,11 @@ $shadow:
   opacity: 0;
   pointer-events: none !important;
 
+  .tooltip-content * {
+    font-size: inherit;
+    font-family: inherit;
+  }
+
   &.type-popover {
     background: $popover-bg;
     color: $popover-color;
@@ -36,71 +35,75 @@ $shadow:
     font-size: 13px;
     padding: 4px;
 
-   .tooltip-caret {
-     position: absolute;
-     z-index: 5001;
-     width: 0;
-     height: 0;
+    .tooltip-caret {
+      position: absolute;
+      z-index: 5001;
+      width: 0;
+      height: 0;
 
-     &.position-left {
-       border-top: 7px solid transparent;
-       border-bottom: 7px solid transparent;
-       border-left: 7px solid $popover-caret-bg;
-     }
+      &.position-left {
+        border-top: 7px solid transparent;
+        border-bottom: 7px solid transparent;
+        border-left: 7px solid $popover-caret-bg;
+      }
 
-     &.position-top {
-       border-left: 7px solid transparent;
-       border-right: 7px solid transparent;
-       border-top: 7px solid $popover-caret-bg;
-     }
+      &.position-top {
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-top: 7px solid $popover-caret-bg;
+      }
 
-     &.position-right {
-       border-top: 7px solid transparent;
-       border-bottom: 7px solid transparent;
-       border-right: 7px solid $popover-caret-bg;
-     }
+      &.position-right {
+        border-top: 7px solid transparent;
+        border-bottom: 7px solid transparent;
+        border-right: 7px solid $popover-caret-bg;
+      }
 
-     &.position-bottom {
-       border-left: 7px solid transparent;
-       border-right: 7px solid transparent;
-       border-bottom: 7px solid $popover-caret-bg;
-     }
-   }
+      &.position-bottom {
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-bottom: 7px solid $popover-caret-bg;
+      }
+
+    }
+
   }
 
   &.type-tooltip {
-   color: $tooltip-color;
-   background: $tooltip-bg;
-   font-size: 12px;
-   padding: 0 10px;
-   text-align: center;
-   pointer-events: auto;
+    color: $tooltip-color;
+    background: $tooltip-bg;
+    font-size: 12px;
+    padding: 0 10px;
+    text-align: center;
+    pointer-events: auto;
 
-   .tooltip-caret {
-     &.position-left {
-       border-top: 7px solid transparent;
-       border-bottom: 7px solid transparent;
-       border-left: 7px solid $tooltip-caret-bg;
-     }
+    .tooltip-caret {
+      &.position-left {
+        border-top: 7px solid transparent;
+        border-bottom: 7px solid transparent;
+        border-left: 7px solid $tooltip-caret-bg;
+      }
 
-     &.position-top {
-       border-left: 7px solid transparent;
-       border-right: 7px solid transparent;
-       border-top: 7px solid $tooltip-caret-bg;
-     }
+      &.position-top {
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-top: 7px solid $tooltip-caret-bg;
+      }
 
-     &.position-right {
-       border-top: 7px solid transparent;
-       border-bottom: 7px solid transparent;
-       border-right: 7px solid $tooltip-caret-bg;
-     }
+      &.position-right {
+        border-top: 7px solid transparent;
+        border-bottom: 7px solid transparent;
+        border-right: 7px solid $tooltip-caret-bg;
+      }
 
-     &.position-bottom {
-       border-left: 7px solid transparent;
-       border-right: 7px solid transparent;
-       border-bottom: 7px solid $tooltip-caret-bg;
-     }
-   }
+      &.position-bottom {
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-bottom: 7px solid $tooltip-caret-bg;
+      }
+
+    }
+
   }
 
   .tooltip-label {
@@ -125,19 +128,19 @@ $shadow:
   }
 
   &.position-right {
-   transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
   }
 
   &.position-left {
-   transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
   }
 
   &.position-top {
-   transform: translate3d(0, -10px, 0);
+    transform: translate3d(0, -10px, 0);
   }
 
   &.position-bottom {
-   transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 10px, 0);
   }
 
   &.animate {
@@ -167,4 +170,5 @@ $shadow:
     color: #5b646b;
     border-radius: 3px;
   }
+
 }

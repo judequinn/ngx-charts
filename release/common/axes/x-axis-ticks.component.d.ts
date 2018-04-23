@@ -9,6 +9,10 @@ export declare class XAxisTicksComponent implements OnChanges, AfterViewInit {
     showGridLines: boolean;
     gridLineHeight: any;
     width: any;
+    fontFamily: string;
+    fontSize: number;
+    maxLabelLength: number;
+    labelRotationAngle: number;
     dimensionsChanged: EventEmitter<{}>;
     verticalSpacing: number;
     rotateLabels: boolean;

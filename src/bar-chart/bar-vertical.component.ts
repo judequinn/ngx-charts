@@ -35,6 +35,10 @@ import { BaseChartComponent } from '../common/base-chart.component';
           [labelText]="xAxisLabel"
           [tickFormatting]="xAxisTickFormatting"
           [ticks]="xAxisTicks"
+          [fontFamily]="xAxisFontFamily"
+          [fontSize]="xAxisFontSize"
+          [labelRotationAngle]="xAxisLabelRotationAngle"
+          [maxLabelLength]="xAxisMaxLabelLength"
           (dimensionsChanged)="updateXAxisHeight($event)">
         </svg:g>
         <svg:g ngx-charts-y-axis
@@ -46,6 +50,8 @@ import { BaseChartComponent } from '../common/base-chart.component';
           [labelText]="yAxisLabel"
           [tickFormatting]="yAxisTickFormatting"
           [ticks]="yAxisTicks"
+          [fontFamily]="yAxisFontFamily"
+          [fontSize]="yAxisFontSize"
           (dimensionsChanged)="updateYAxisWidth($event)">
         </svg:g>
         <svg:g ngx-charts-series-vertical
@@ -57,6 +63,8 @@ import { BaseChartComponent } from '../common/base-chart.component';
           [gradient]="gradient"
           [tooltipDisabled]="tooltipDisabled"
           [tooltipTemplate]="tooltipTemplate"
+          [tooltipFontFamily]="fontFamily"
+          [tooltipFontSize]="fontSize"
           [activeEntries]="activeEntries"
           [roundEdges]="roundEdges"
           [animations]="animations"
@@ -95,6 +103,14 @@ export class BarVerticalComponent extends BaseChartComponent {
   @Input() roundEdges: boolean = true;
   @Input() yScaleMax: number;
   @Input() yScaleMin: number;
+  @Input() fontSize: number;
+  @Input() fontFamily: string;
+  @Input() xAxisFontFamily: string;
+  @Input() xAxisFontSize: number;
+  @Input() xAxisMaxLabelLength: number;
+  @Input() xAxisLabelRotationAngle: number;
+  @Input() yAxisFontFamily: string;
+  @Input() yAxisFontSize: number;
 
   @Output() activate: EventEmitter<any> = new EventEmitter();
   @Output() deactivate: EventEmitter<any> = new EventEmitter();
@@ -136,7 +152,7 @@ export class BarVerticalComponent extends BaseChartComponent {
     this.setColors();
     this.legendOptions = this.getLegendOptions();
 
-    this.transform = `translate(${ this.dims.xOffset } , ${ this.margin[0] })`;
+    this.transform = `translate(${this.dims.xOffset} , ${this.margin[0]})`;
   }
 
   getXScale(): any {
@@ -194,7 +210,9 @@ export class BarVerticalComponent extends BaseChartComponent {
       scaleType: this.schemeType,
       colors: undefined,
       domain: [],
-      title: undefined
+      title: undefined,
+      fontSize: this.fontSize,
+      fontFamily: this.fontFamily
     };
     if (opts.scaleType === 'ordinal') {
       opts.domain = this.xDomain;
@@ -225,7 +243,7 @@ export class BarVerticalComponent extends BaseChartComponent {
       return;
     }
 
-    this.activeEntries = [ item, ...this.activeEntries ];
+    this.activeEntries = [item, ...this.activeEntries];
     this.activate.emit({ value: item, entries: this.activeEntries });
   }
 

@@ -48,6 +48,8 @@ export enum D0Types {
       [tooltipTitle]="tooltipTemplate ? undefined : bar.tooltipText"
       [tooltipTemplate]="tooltipTemplate"
       [tooltipContext]="bar.data"
+      [tooltipFontFamily]="tooltipFontFamily"
+      [tooltipFontSize]="tooltipFontSize"
       [animations]="animations">
     </svg:g>
   `,
@@ -76,6 +78,8 @@ export class SeriesVerticalComponent implements OnChanges {
   @Input() seriesName: string;
   @Input() tooltipDisabled: boolean = false;
   @Input() tooltipTemplate: TemplateRef<any>;
+  @Input() tooltipFontFamily: string;
+  @Input() tooltipFontSize: number;
   @Input() roundEdges: boolean;
   @Input() animations: boolean = true;
 

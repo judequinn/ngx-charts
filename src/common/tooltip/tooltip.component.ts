@@ -18,7 +18,7 @@ import { AlignmentTypes } from './alignment.type';
         [hidden]="!showCaret"
         class="tooltip-caret position-{{this.placement}}">
       </span>
-      <div class="tooltip-content">
+      <div class="tooltip-content" [style.font-size]="fontSize + 'px'" [style.font-family]="fontFamily">
         <span *ngIf="!title">
           <ng-template
             [ngTemplateOutlet]="template"
@@ -47,6 +47,8 @@ export class TooltipContentComponent implements AfterViewInit {
   @Input() title: string;
   @Input() template: any;
   @Input() context: any;
+  @Input() fontFamily: string;
+  @Input() fontSize: number;
 
   @ViewChild('caretElm') caretElm;
 

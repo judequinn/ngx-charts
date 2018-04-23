@@ -41,6 +41,8 @@ import { BaseChartComponent } from '../common/base-chart.component';
           [tooltipDisabled]="tooltipDisabled"
           [tooltipTemplate]="tooltipTemplate"
           [tooltipText]="tooltipText"
+          [tooltipFontFamily]="fontFamily"
+          [tooltipFontSize]="fontSize"
           (select)="onClick($event)"
           (activate)="onActivate($event)"
           (deactivate)="onDeactivate($event)"
@@ -70,6 +72,8 @@ export class PieChartComponent extends BaseChartComponent {
   @Input() trimLabels: boolean = true;
   @Input() maxLabelLength: number = 10;
   @Input() tooltipText: any;
+  @Input() fontSize: number;
+  @Input() fontFamily: string;
 
   @Output() select = new EventEmitter();
   @Output() activate: EventEmitter<any> = new EventEmitter();
@@ -159,7 +163,9 @@ export class PieChartComponent extends BaseChartComponent {
       scaleType: 'ordinal',
       domain: this.domain,
       colors: this.colors,
-      title: this.legendTitle
+      title: this.legendTitle,
+      fontSize: this.fontSize,
+      fontFamily: this.fontFamily
     };
   }
 

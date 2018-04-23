@@ -48,6 +48,10 @@ import { getUniqueXDomainValues } from '../common/domain.helper';
           [labelText]="xAxisLabel"
           [tickFormatting]="xAxisTickFormatting"
           [ticks]="xAxisTicks"
+          [fontFamily]="xAxisFontFamily"
+          [fontSize]="xAxisFontSize"
+          [labelRotationAngle]="xAxisLabelRotationAngle"
+          [maxLabelLength]="xAxisMaxLabelLength"
           (dimensionsChanged)="updateXAxisHeight($event)">
         </svg:g>
         <svg:g ngx-charts-y-axis
@@ -59,6 +63,8 @@ import { getUniqueXDomainValues } from '../common/domain.helper';
           [labelText]="yAxisLabel"
           [tickFormatting]="yAxisTickFormatting"
           [ticks]="yAxisTicks"
+          [fontFamily]="yAxisFontFamily"
+          [fontSize]="yAxisFontSize"
           (dimensionsChanged)="updateYAxisWidth($event)">
         </svg:g>
         <svg:g [attr.clip-path]="clipPath">
@@ -87,6 +93,8 @@ import { getUniqueXDomainValues } from '../common/domain.helper';
               [colors]="colors"
               [tooltipDisabled]="tooltipDisabled"
               [tooltipTemplate]="seriesTooltipTemplate"
+              [tooltipFontFamily]="fontFamily"
+              [tooltipFontSize]="fontSize"
               (hover)="updateHoveredVertical($event)"
             />
 
@@ -102,6 +110,8 @@ import { getUniqueXDomainValues } from '../common/domain.helper';
                 [visibleValue]="hoveredVertical"
                 [tooltipDisabled]="tooltipDisabled"
                 [tooltipTemplate]="tooltipTemplate"
+                [tooltipFontFamily]="fontFamily"
+                [tooltipFontSize]="fontSize"
                 (select)="onClick($event, series)"
                 (activate)="onActivate($event)"
                 (deactivate)="onDeactivate($event)"
@@ -167,6 +177,14 @@ export class AreaChartStackedComponent extends BaseChartComponent {
   @Input() xScaleMax: any;
   @Input() yScaleMin: number;
   @Input() yScaleMax: number;
+  @Input() fontSize: number;
+  @Input() fontFamily: string;
+  @Input() xAxisFontFamily: string;
+  @Input() xAxisFontSize: number;
+  @Input() xAxisMaxLabelLength: number;
+  @Input() xAxisLabelRotationAngle: number;
+  @Input() yAxisFontFamily: string;
+  @Input() yAxisFontSize: number;
 
   @Output() activate: EventEmitter<any> = new EventEmitter();
   @Output() deactivate: EventEmitter<any> = new EventEmitter();

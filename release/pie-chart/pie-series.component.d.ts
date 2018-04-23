@@ -15,6 +15,8 @@ export declare class PieSeriesComponent implements OnChanges {
     tooltipText: (o: any) => any;
     tooltipDisabled: boolean;
     tooltipTemplate: TemplateRef<any>;
+    tooltipFontFamily: string;
+    tooltipFontSize: number;
     animations: boolean;
     select: EventEmitter<{}>;
     activate: EventEmitter<{}>;

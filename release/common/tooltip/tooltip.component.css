@@ -6,6 +6,9 @@
   font-weight: normal;
   opacity: 0;
   pointer-events: none !important; }
+  .ngx-charts-tooltip-content .tooltip-content * {
+    font-size: inherit;
+    font-family: inherit; }
   .ngx-charts-tooltip-content.type-popover {
     background: #fff;
     color: #060709;

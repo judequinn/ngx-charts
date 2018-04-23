@@ -13,6 +13,8 @@ export declare class BubbleSeriesComponent implements OnChanges {
     yAxisLabel: string;
     tooltipDisabled: boolean;
     tooltipTemplate: TemplateRef<any>;
+    tooltipFontFamily: string;
+    tooltipFontSize: number;
     select: EventEmitter<{}>;
     activate: EventEmitter<{}>;
     deactivate: EventEmitter<{}>;

@@ -165,7 +165,9 @@ var TooltipDirective = /** @class */ (function () {
             showCaret: this.tooltipShowCaret,
             cssClass: this.tooltipCssClass,
             spacing: this.tooltipSpacing,
-            context: this.tooltipContext
+            context: this.tooltipContext,
+            fontSize: this.tooltipFontSize,
+            fontFamily: this.tooltipFontFamily
         };
     };
     __decorate([
@@ -236,6 +238,14 @@ var TooltipDirective = /** @class */ (function () {
         Input(),
         __metadata("design:type", Boolean)
     ], TooltipDirective.prototype, "tooltipImmediateExit", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", String)
+    ], TooltipDirective.prototype, "tooltipFontFamily", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], TooltipDirective.prototype, "tooltipFontSize", void 0);
     __decorate([
         Output(),
         __metadata("design:type", Object)

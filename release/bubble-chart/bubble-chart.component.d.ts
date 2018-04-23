@@ -27,6 +27,14 @@ export declare class BubbleChartComponent extends BaseChartComponent {
     xScaleMax: any;
     yScaleMin: any;
     yScaleMax: any;
+    fontSize: number;
+    fontFamily: string;
+    xAxisFontFamily: string;
+    xAxisFontSize: number;
+    xAxisMaxLabelLength: number;
+    xAxisLabelRotationAngle: number;
+    yAxisFontFamily: string;
+    yAxisFontSize: number;
     activate: EventEmitter<any>;
     deactivate: EventEmitter<any>;
     tooltipTemplate: TemplateRef<any>;

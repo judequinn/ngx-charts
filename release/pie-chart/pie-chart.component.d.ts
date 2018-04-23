@@ -15,6 +15,8 @@ export declare class PieChartComponent extends BaseChartComponent {
     trimLabels: boolean;
     maxLabelLength: number;
     tooltipText: any;
+    fontSize: number;
+    fontFamily: string;
     select: EventEmitter<{}>;
     activate: EventEmitter<any>;
     deactivate: EventEmitter<any>;
@@ -37,6 +39,8 @@ export declare class PieChartComponent extends BaseChartComponent {
         domain: any;
         colors: ColorHelper;
         title: string;
+        fontSize: number;
+        fontFamily: string;
     };
     onActivate(item: any): void;
     onDeactivate(item: any): void;

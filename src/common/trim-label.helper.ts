@@ -6,7 +6,7 @@ export function trimLabel(s, max = 16): string {
       return '';
     }
   }
-  
+
   s = s.trim();
   if(s.length <= max) {
     return s;

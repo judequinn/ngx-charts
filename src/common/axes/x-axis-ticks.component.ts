@@ -24,8 +24,9 @@ import { reduceTicks } from './ticks.helper';
           stroke-width="0.01"
           [attr.text-anchor]="textAnchor"
           [attr.transform]="textTransform"
-          [style.font-size]="'12px'">
-          {{trimLabel(tickFormat(tick))}}
+          [style.font-size]="fontSize + 'px'"
+          [style.font-family]="fontFamily">
+          {{trimLabel(tickFormat(tick), maxLabelLength)}}
         </svg:text>
       </svg:g>
     </svg:g>
@@ -54,6 +55,10 @@ export class XAxisTicksComponent implements OnChanges, AfterViewInit {
   @Input() showGridLines = false;
   @Input() gridLineHeight;
   @Input() width;
+  @Input() fontFamily: string = 'initial';
+  @Input() fontSize: number = 12;
+  @Input() maxLabelLength: number;
+  @Input() labelRotationAngle: number;
 
   @Output() dimensionsChanged = new EventEmitter();
 
@@ -112,19 +117,27 @@ export class XAxisTicksComponent implements OnChanges, AfterViewInit {
       };
     }
 
-    const angle = this.getRotationAngle(this.ticks);
+    const angle = this.labelRotationAngle != null ? this.labelRotationAngle : this.getRotationAngle(this.ticks);
 
     this.adjustedScale = this.scale.bandwidth ? function(d) {
       return this.scale(d) + this.scale.bandwidth() * 0.5;
     } : this.scale;
 
     this.textTransform = '';
-    if (angle !== 0) {
+    if (angle === 0) {
+      this.textAnchor = 'middle';
+    } else if (Math.abs(angle) <= 30) {
+      this.textTransform = `rotate(${angle})`;
+      this.textAnchor = 'middle';
+      this.verticalSpacing = 40;
+    } else if (angle < 0) {
       this.textTransform = `rotate(${angle})`;
       this.textAnchor = 'end';
       this.verticalSpacing = 10;
-    } else {
-      this.textAnchor = 'middle';
+    } else if (angle > 0) {
+      this.textTransform = `rotate(${angle})`;
+      this.textAnchor = 'start';
+      this.verticalSpacing = 10;
     }
 
     setTimeout(() => this.updateDims());

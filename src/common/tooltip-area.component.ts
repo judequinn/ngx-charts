@@ -60,6 +60,8 @@ import {
         [tooltipTemplate]="tooltipTemplate ? tooltipTemplate: defaultTooltipTemplate"
         [tooltipContext]="anchorValues"
         [tooltipImmediateExit]="true"
+        [tooltipFontFamily]="tooltipFontFamily"
+        [tooltipFontSize]="tooltipFontSize"
       />
     </svg:g>
   `,
@@ -96,6 +98,8 @@ export class TooltipArea {
   @Input() showPercentage: boolean = false;
   @Input() tooltipDisabled: boolean = false;
   @Input() tooltipTemplate: TemplateRef<any>;
+  @Input() tooltipFontFamily: string;
+  @Input() tooltipFontSize: number;
 
   @Output() hover = new EventEmitter();
 

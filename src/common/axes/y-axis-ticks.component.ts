@@ -27,8 +27,9 @@ import { roundedRect } from '../../common/shape.helper';
           [attr.x]="x1"
           [attr.y]="y1"
           [attr.text-anchor]="textAnchor"
-          [style.font-size]="'12px'">
-          {{trimLabel(tickFormat(tick))}}
+          [style.font-size]="fontSize + 'px'"
+          [style.font-family]="fontFamily">
+          {{trimLabel(tickFormat(tick), maxLabelLength)}}
         </svg:text>
       </svg:g>
     </svg:g>
@@ -90,6 +91,8 @@ export class YAxisTicksComponent implements OnChanges, AfterViewInit {
   @Input() referenceLines;
   @Input() showRefLabels: boolean = false;
   @Input() showRefLines: boolean = false;
+  @Input() fontFamily: string = 'initial';
+  @Input() fontSize: number = 12;
 
   @Output() dimensionsChanged = new EventEmitter();
 
@@ -222,7 +225,7 @@ export class YAxisTicksComponent implements OnChanges, AfterViewInit {
   getTicks(): any {
     let ticks;
     const maxTicks = this.getMaxTicks(20);
-    const maxScaleTicks = this.getMaxTicks(50);
+    const maxScaleTicks =  this.getMaxTicks(50);
 
     if (this.tickValues) {
       ticks = this.tickValues;

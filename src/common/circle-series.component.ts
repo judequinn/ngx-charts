@@ -60,6 +60,8 @@ import { ColorHelper } from '.';
         [tooltipTitle]="tooltipTemplate ? undefined : getTooltipText(circle)"
         [tooltipTemplate]="tooltipTemplate"
         [tooltipContext]="circle.data"
+        [tooltipFontFamily]="tooltipFontFamily"
+        [tooltipFontSize]="tooltipFontSize"
       />
     </svg:g>
   `,
@@ -87,6 +89,8 @@ export class CircleSeriesComponent implements OnChanges, OnInit {
   @Input() activeEntries: any[];
   @Input() tooltipDisabled: boolean = false;
   @Input() tooltipTemplate: TemplateRef<any>;
+  @Input() tooltipFontFamily: string;
+  @Input() tooltipFontSize: number;
 
   @Output() select = new EventEmitter();
   @Output() activate = new EventEmitter();

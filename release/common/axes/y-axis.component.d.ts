@@ -14,6 +14,8 @@ export declare class YAxisComponent implements OnChanges {
     referenceLines: any;
     showRefLines: any;
     showRefLabels: any;
+    fontFamily: string;
+    fontSize: number;
     dimensionsChanged: EventEmitter<{}>;
     yAxisClassName: string;
     tickArguments: any;

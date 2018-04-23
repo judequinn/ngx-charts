@@ -106,6 +106,14 @@ var TooltipContentComponent = /** @class */ (function () {
         __metadata("design:type", Object)
     ], TooltipContentComponent.prototype, "context", void 0);
     __decorate([
+        Input(),
+        __metadata("design:type", String)
+    ], TooltipContentComponent.prototype, "fontFamily", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], TooltipContentComponent.prototype, "fontSize", void 0);
+    __decorate([
         ViewChild('caretElm'),
         __metadata("design:type", Object)
     ], TooltipContentComponent.prototype, "caretElm", void 0);
@@ -124,7 +132,7 @@ var TooltipContentComponent = /** @class */ (function () {
     TooltipContentComponent = __decorate([
         Component({
             selector: 'ngx-tooltip-content',
-            template: "\n    <div>\n      <span\n        #caretElm\n        [hidden]=\"!showCaret\"\n        class=\"tooltip-caret position-{{this.placement}}\">\n      </span>\n      <div class=\"tooltip-content\">\n        <span *ngIf=\"!title\">\n          <ng-template\n            [ngTemplateOutlet]=\"template\"\n            [ngTemplateOutletContext]=\"{ model: context }\">\n          </ng-template>\n        </span>\n        <span\n          *ngIf=\"title\"\n          [innerHTML]=\"title\">\n        </span>\n      </div>\n    </div>\n  ",
+            template: "\n    <div>\n      <span\n        #caretElm\n        [hidden]=\"!showCaret\"\n        class=\"tooltip-caret position-{{this.placement}}\">\n      </span>\n      <div class=\"tooltip-content\" [style.font-size]=\"fontSize + 'px'\" [style.font-family]=\"fontFamily\">\n        <span *ngIf=\"!title\">\n          <ng-template\n            [ngTemplateOutlet]=\"template\"\n            [ngTemplateOutletContext]=\"{ model: context }\">\n          </ng-template>\n        </span>\n        <span\n          *ngIf=\"title\"\n          [innerHTML]=\"title\">\n        </span>\n      </div>\n    </div>\n  ",
             encapsulation: ViewEncapsulation.None,
             styleUrls: ['./tooltip.component.css']
         }),

@@ -15,6 +15,8 @@ var XAxisTicksComponent = /** @class */ (function () {
         this.tickArguments = [5];
         this.tickStroke = '#ccc';
         this.showGridLines = false;
+        this.fontFamily = 'initial';
+        this.fontSize = 12;
         this.dimensionsChanged = new EventEmitter();
         this.verticalSpacing = 20;
         this.rotateLabels = false;
@@ -61,18 +63,28 @@ var XAxisTicksComponent = /** @class */ (function () {
                 return d.toLocaleString();
             };
         }
-        var angle = this.getRotationAngle(this.ticks);
+        var angle = this.labelRotationAngle != null ? this.labelRotationAngle : this.getRotationAngle(this.ticks);
         this.adjustedScale = this.scale.bandwidth ? function (d) {
             return this.scale(d) + this.scale.bandwidth() * 0.5;
         } : this.scale;
         this.textTransform = '';
-        if (angle !== 0) {
+        if (angle === 0) {
+            this.textAnchor = 'middle';
+        }
+        else if (Math.abs(angle) <= 30) {
+            this.textTransform = "rotate(" + angle + ")";
+            this.textAnchor = 'middle';
+            this.verticalSpacing = 40;
+        }
+        else if (angle < 0) {
             this.textTransform = "rotate(" + angle + ")";
             this.textAnchor = 'end';
             this.verticalSpacing = 10;
         }
-        else {
-            this.textAnchor = 'middle';
+        else if (angle > 0) {
+            this.textTransform = "rotate(" + angle + ")";
+            this.textAnchor = 'start';
+            this.verticalSpacing = 10;
         }
         setTimeout(function () { return _this.updateDims(); });
     };
@@ -158,6 +170,22 @@ var XAxisTicksComponent = /** @class */ (function () {
         __metadata("design:type", Object)
     ], XAxisTicksComponent.prototype, "width", void 0);
     __decorate([
+        Input(),
+        __metadata("design:type", String)
+    ], XAxisTicksComponent.prototype, "fontFamily", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], XAxisTicksComponent.prototype, "fontSize", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], XAxisTicksComponent.prototype, "maxLabelLength", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], XAxisTicksComponent.prototype, "labelRotationAngle", void 0);
+    __decorate([
         Output(),
         __metadata("design:type", Object)
     ], XAxisTicksComponent.prototype, "dimensionsChanged", void 0);
@@ -168,7 +196,7 @@ var XAxisTicksComponent = /** @class */ (function () {
     XAxisTicksComponent = __decorate([
         Component({
             selector: 'g[ngx-charts-x-axis-ticks]',
-            template: "\n    <svg:g #ticksel>\n      <svg:g *ngFor=\"let tick of ticks\" class=\"tick\"\n        [attr.transform]=\"tickTransform(tick)\">\n        <title>{{tickFormat(tick)}}</title>\n        <svg:text\n          stroke-width=\"0.01\"\n          [attr.text-anchor]=\"textAnchor\"\n          [attr.transform]=\"textTransform\"\n          [style.font-size]=\"'12px'\">\n          {{trimLabel(tickFormat(tick))}}\n        </svg:text>\n      </svg:g>\n    </svg:g>\n\n    <svg:g *ngFor=\"let tick of ticks\"\n      [attr.transform]=\"tickTransform(tick)\">\n      <svg:g *ngIf=\"showGridLines\"\n        [attr.transform]=\"gridLineTransform()\">\n        <svg:line\n          class=\"gridline-path gridline-path-vertical\"\n          [attr.y1]=\"-gridLineHeight\"\n          y2=\"0\" />\n      </svg:g>\n    </svg:g>\n  ",
+            template: "\n    <svg:g #ticksel>\n      <svg:g *ngFor=\"let tick of ticks\" class=\"tick\"\n        [attr.transform]=\"tickTransform(tick)\">\n        <title>{{tickFormat(tick)}}</title>\n        <svg:text\n          stroke-width=\"0.01\"\n          [attr.text-anchor]=\"textAnchor\"\n          [attr.transform]=\"textTransform\"\n          [style.font-size]=\"fontSize + 'px'\"\n          [style.font-family]=\"fontFamily\">\n          {{trimLabel(tickFormat(tick), maxLabelLength)}}\n        </svg:text>\n      </svg:g>\n    </svg:g>\n\n    <svg:g *ngFor=\"let tick of ticks\"\n      [attr.transform]=\"tickTransform(tick)\">\n      <svg:g *ngIf=\"showGridLines\"\n        [attr.transform]=\"gridLineTransform()\">\n        <svg:line\n          class=\"gridline-path gridline-path-vertical\"\n          [attr.y1]=\"-gridLineHeight\"\n          y2=\"0\" />\n      </svg:g>\n    </svg:g>\n  ",
             changeDetection: ChangeDetectionStrategy.OnPush
         }),
         __metadata("design:paramtypes", [])

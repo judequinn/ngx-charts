@@ -43,6 +43,8 @@ import { formatLabel } from '../common/label.helper';
           [tooltipTitle]="tooltipTemplate ? undefined : getTooltipText(circle)"
           [tooltipTemplate]="tooltipTemplate"
           [tooltipContext]="circle.data"
+          [tooltipFontFamily]="tooltipFontFamily"
+          [tooltipFontSize]="tooltipFontSize"
         />
       </svg:g>
     </svg:g>
@@ -75,6 +77,8 @@ export class BubbleSeriesComponent implements OnChanges {
   @Input() yAxisLabel: string;
   @Input() tooltipDisabled: boolean = false;
   @Input() tooltipTemplate: TemplateRef<any>;
+  @Input() tooltipFontFamily: string;
+  @Input() tooltipFontSize: number;
 
   @Output() select = new EventEmitter();
   @Output() activate = new EventEmitter();

@@ -28,7 +28,9 @@ import { formatLabel } from '../common/label.helper';
         [max]="max"
         [value]="arc.value"
         [explodeSlices]="explodeSlices"
-        [animations]="animations">
+        [animations]="animations"
+        [fontFamily]="tooltipFontFamily"
+        [fontSize]="tooltipFontSize">
       </svg:g>
       <svg:g
         ngx-charts-pie-arc
@@ -53,7 +55,9 @@ import { formatLabel } from '../common/label.helper';
         [tooltipType]="'tooltip'"
         [tooltipTitle]="tooltipTemplate ? undefined : tooltipText(arc)"
         [tooltipTemplate]="tooltipTemplate"
-        [tooltipContext]="arc.data">
+        [tooltipContext]="arc.data"
+        [tooltipFontFamily]="tooltipFontFamily"
+        [tooltipFontSize]="tooltipFontSize">
       </svg:g>
     </svg:g>
   `,
@@ -76,6 +80,8 @@ export class PieSeriesComponent implements OnChanges {
   @Input() tooltipText: (o: any) => any;
   @Input() tooltipDisabled: boolean = false;
   @Input() tooltipTemplate: TemplateRef<any>;
+  @Input() tooltipFontFamily: string;
+  @Input() tooltipFontSize: number;
   @Input() animations: boolean = true;
 
   @Output() select = new EventEmitter();

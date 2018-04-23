@@ -14,6 +14,8 @@ export declare class TooltipArea {
     showPercentage: boolean;
     tooltipDisabled: boolean;
     tooltipTemplate: TemplateRef<any>;
+    tooltipFontFamily: string;
+    tooltipFontSize: number;
     hover: EventEmitter<{}>;
     tooltipAnchor: any;
     constructor(renderer: Renderer);

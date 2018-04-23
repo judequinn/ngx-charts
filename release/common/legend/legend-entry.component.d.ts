@@ -4,6 +4,8 @@ export declare class LegendEntryComponent {
     label: any;
     formattedLabel: string;
     isActive: boolean;
+    fontFamily: string;
+    fontSize: number;
     select: EventEmitter<any>;
     activate: EventEmitter<any>;
     deactivate: EventEmitter<any>;

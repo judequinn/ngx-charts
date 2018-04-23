@@ -46,6 +46,14 @@ var LegendEntryComponent = /** @class */ (function () {
         __metadata("design:type", Boolean)
     ], LegendEntryComponent.prototype, "isActive", void 0);
     __decorate([
+        Input(),
+        __metadata("design:type", String)
+    ], LegendEntryComponent.prototype, "fontFamily", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], LegendEntryComponent.prototype, "fontSize", void 0);
+    __decorate([
         Output(),
         __metadata("design:type", EventEmitter)
     ], LegendEntryComponent.prototype, "select", void 0);
@@ -76,7 +84,7 @@ var LegendEntryComponent = /** @class */ (function () {
     LegendEntryComponent = __decorate([
         Component({
             selector: 'ngx-charts-legend-entry',
-            template: "\n    <span \n      [title]=\"formattedLabel\"\n      tabindex=\"-1\"\n      [class.active]=\"isActive\"\n      (click)=\"select.emit(formattedLabel)\">\n      <span\n        class=\"legend-label-color\"\n        [style.background-color]=\"color\"\n        (click)=\"toggle.emit(formattedLabel)\">\n      </span>\n      <span class=\"legend-label-text\">\n        {{trimmedLabel}}\n      </span>\n    </span>\n  ",
+            template: "\n    <span\n      [title]=\"formattedLabel\"\n      tabindex=\"-1\"\n      [class.active]=\"isActive\"\n      (click)=\"select.emit(formattedLabel)\">\n      <span\n        class=\"legend-label-color\"\n        [style.background-color]=\"color\"\n        (click)=\"toggle.emit(formattedLabel)\">\n      </span>\n      <span class=\"legend-label-text\"\n            [style.font-family]=\"fontFamily\"\n            [style.font-size]=\"fontSize + 'px'\">\n        {{trimmedLabel}}\n      </span>\n    </span>\n  ",
             changeDetection: ChangeDetectionStrategy.OnPush
         })
     ], LegendEntryComponent);

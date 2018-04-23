@@ -32,6 +32,14 @@ export declare class LineChartComponent extends BaseChartComponent {
     xScaleMax: any;
     yScaleMin: number;
     yScaleMax: number;
+    fontSize: number;
+    fontFamily: string;
+    xAxisFontFamily: string;
+    xAxisFontSize: number;
+    xAxisMaxLabelLength: number;
+    xAxisLabelRotationAngle: number;
+    yAxisFontFamily: string;
+    yAxisFontSize: number;
     activate: EventEmitter<any>;
     deactivate: EventEmitter<any>;
     tooltipTemplate: TemplateRef<any>;
@@ -84,6 +92,8 @@ export declare class LineChartComponent extends BaseChartComponent {
         colors: any;
         domain: any[];
         title: any;
+        fontSize: number;
+        fontFamily: string;
     };
     updateYAxisWidth({width}: {
         width: any;

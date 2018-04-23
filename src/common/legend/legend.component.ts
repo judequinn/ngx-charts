@@ -22,6 +22,8 @@ import { formatLabel } from '../label.helper';
               [formattedLabel]="entry.formattedLabel"
               [color]="entry.color"
               [isActive]="isActive(entry)"
+              [fontFamily]="fontFamily"
+              [fontSize]="fontSize"
               (select)="labelClick.emit($event)"
               (activate)="activate($event)"
               (deactivate)="deactivate($event)">
@@ -43,6 +45,8 @@ export class LegendComponent implements OnChanges {
   @Input() height;
   @Input() width;
   @Input() activeEntries;
+  @Input() fontFamily: string;
+  @Input() fontSize: number;
 
   @Output() labelClick: EventEmitter<any> = new EventEmitter();
   @Output() labelActivate: EventEmitter<any> = new EventEmitter();

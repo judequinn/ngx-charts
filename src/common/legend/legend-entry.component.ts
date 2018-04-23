@@ -1,8 +1,8 @@
 import {
-  Component, 
-  Input, 
-  Output, 
-  ChangeDetectionStrategy,   
+  Component,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
   HostListener,
   EventEmitter
  } from '@angular/core';
@@ -10,7 +10,7 @@ import {
 @Component({
   selector: 'ngx-charts-legend-entry',
   template: `
-    <span 
+    <span
       [title]="formattedLabel"
       tabindex="-1"
       [class.active]="isActive"
@@ -20,7 +20,9 @@ import {
         [style.background-color]="color"
         (click)="toggle.emit(formattedLabel)">
       </span>
-      <span class="legend-label-text">
+      <span class="legend-label-text"
+            [style.font-family]="fontFamily"
+            [style.font-size]="fontSize + 'px'">
         {{trimmedLabel}}
       </span>
     </span>
@@ -33,6 +35,8 @@ export class LegendEntryComponent {
   @Input() label: any;
   @Input() formattedLabel: string;
   @Input() isActive: boolean = false;
+  @Input() fontFamily: string;
+  @Input() fontSize: number;
 
   @Output() select: EventEmitter<any> = new EventEmitter();
   @Output() activate: EventEmitter<any> = new EventEmitter();
