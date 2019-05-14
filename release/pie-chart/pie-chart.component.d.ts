@@ -17,8 +17,12 @@ export declare class PieChartComponent extends BaseChartComponent {
     maxLabelLength: number;
     tooltipText: any;
 <<<<<<< HEAD
+<<<<<<< HEAD
     fontSize: number;
     fontFamily: string;
+=======
+    dblclick: EventEmitter<{}>;
+>>>>>>> upstream/master
 =======
     dblclick: EventEmitter<{}>;
 >>>>>>> upstream/master
@@ -45,8 +49,12 @@ export declare class PieChartComponent extends BaseChartComponent {
         colors: ColorHelper;
         title: string;
 <<<<<<< HEAD
+<<<<<<< HEAD
         fontSize: number;
         fontFamily: string;
+=======
+        position: string;
+>>>>>>> upstream/master
 =======
         position: string;
 >>>>>>> upstream/master

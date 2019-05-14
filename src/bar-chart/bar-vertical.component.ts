@@ -150,7 +150,7 @@ export class BarVerticalComponent extends BaseChartComponent {
 
   update(): void {
     super.update();
-
+   
     if (!this.showDataLabel) {
       this.dataLabelMaxHeight = { negative: 0, positive: 0 };
     }
@@ -258,6 +258,17 @@ export class BarVerticalComponent extends BaseChartComponent {
   updateXAxisHeight({ height }): void {
     this.xAxisHeight = height;
     this.update();
+  }
+  
+  onDataLabelMaxHeightChanged(event) {      
+    if (event.size.negative)  {
+      this.dataLabelMaxHeight.negative = Math.max(this.dataLabelMaxHeight.negative, event.size.height);
+    } else {
+      this.dataLabelMaxHeight.positive = Math.max(this.dataLabelMaxHeight.positive, event.size.height);
+    }      
+    if (event.index === (this.results.length - 1)) {
+      setTimeout(() => this.update());
+    }      
   }
 
   onDataLabelMaxHeightChanged(event) {

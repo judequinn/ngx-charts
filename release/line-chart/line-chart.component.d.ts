@@ -97,8 +97,12 @@ export declare class LineChartComponent extends BaseChartComponent {
         domain: any[];
         title: any;
 <<<<<<< HEAD
+<<<<<<< HEAD
         fontSize: number;
         fontFamily: string;
+=======
+        position: string;
+>>>>>>> upstream/master
 =======
         position: string;
 >>>>>>> upstream/master

@@ -18,8 +18,12 @@ var XAxisTicksComponent = /** @class */ (function () {
         this.maxTickLength = 16;
         this.showGridLines = false;
 <<<<<<< HEAD
+<<<<<<< HEAD
         this.fontFamily = 'initial';
         this.fontSize = 12;
+=======
+        this.rotateTicks = true;
+>>>>>>> upstream/master
 =======
         this.rotateTicks = true;
 >>>>>>> upstream/master
@@ -69,6 +73,7 @@ var XAxisTicksComponent = /** @class */ (function () {
             };
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         var angle = this.labelRotationAngle != null ? this.labelRotationAngle : this.getRotationAngle(this.ticks);
         this.adjustedScale = this.scale.bandwidth ? function (d) {
             return this.scale(d) + this.scale.bandwidth() * 0.5;
@@ -83,6 +88,16 @@ var XAxisTicksComponent = /** @class */ (function () {
             this.verticalSpacing = 40;
         }
         else if (angle < 0) {
+=======
+        var angle = this.rotateTicks ? this.getRotationAngle(this.ticks) : null;
+        this.adjustedScale = this.scale.bandwidth
+            ? function (d) {
+                return this.scale(d) + this.scale.bandwidth() * 0.5;
+            }
+            : this.scale;
+        this.textTransform = '';
+        if (angle && angle !== 0) {
+>>>>>>> upstream/master
 =======
         var angle = this.rotateTicks ? this.getRotationAngle(this.ticks) : null;
         this.adjustedScale = this.scale.bandwidth
@@ -204,6 +219,7 @@ var XAxisTicksComponent = /** @class */ (function () {
     __decorate([
         Input(),
 <<<<<<< HEAD
+<<<<<<< HEAD
         __metadata("design:type", String)
     ], XAxisTicksComponent.prototype, "fontFamily", void 0);
     __decorate([
@@ -222,6 +238,10 @@ var XAxisTicksComponent = /** @class */ (function () {
         __metadata("design:type", Boolean)
     ], XAxisTicksComponent.prototype, "rotateTicks", void 0);
 >>>>>>> upstream/master
+=======
+        __metadata("design:type", Boolean)
+    ], XAxisTicksComponent.prototype, "rotateTicks", void 0);
+>>>>>>> upstream/master
     __decorate([
         Output(),
         __metadata("design:type", Object)
@@ -234,7 +254,11 @@ var XAxisTicksComponent = /** @class */ (function () {
         Component({
             selector: 'g[ngx-charts-x-axis-ticks]',
 <<<<<<< HEAD
+<<<<<<< HEAD
             template: "\n    <svg:g #ticksel>\n      <svg:g *ngFor=\"let tick of ticks\" class=\"tick\"\n        [attr.transform]=\"tickTransform(tick)\">\n        <title>{{tickFormat(tick)}}</title>\n        <svg:text\n          stroke-width=\"0.01\"\n          [attr.text-anchor]=\"textAnchor\"\n          [attr.transform]=\"textTransform\"\n          [style.font-size]=\"fontSize + 'px'\"\n          [style.font-family]=\"fontFamily\">\n          {{trimLabel(tickFormat(tick), maxLabelLength)}}\n        </svg:text>\n      </svg:g>\n    </svg:g>\n\n    <svg:g *ngFor=\"let tick of ticks\"\n      [attr.transform]=\"tickTransform(tick)\">\n      <svg:g *ngIf=\"showGridLines\"\n        [attr.transform]=\"gridLineTransform()\">\n        <svg:line\n          class=\"gridline-path gridline-path-vertical\"\n          [attr.y1]=\"-gridLineHeight\"\n          y2=\"0\" />\n      </svg:g>\n    </svg:g>\n  ",
+=======
+            template: "\n    <svg:g #ticksel>\n      <svg:g *ngFor=\"let tick of ticks\" class=\"tick\"\n        [attr.transform]=\"tickTransform(tick)\">\n        <title>{{tickFormat(tick)}}</title>\n        <svg:text\n          stroke-width=\"0.01\"\n          [attr.text-anchor]=\"textAnchor\"\n          [attr.transform]=\"textTransform\"\n          [style.font-size]=\"'12px'\">\n          {{tickTrim(tickFormat(tick))}}\n        </svg:text>\n      </svg:g>\n    </svg:g>\n\n    <svg:g *ngFor=\"let tick of ticks\"\n      [attr.transform]=\"tickTransform(tick)\">\n      <svg:g *ngIf=\"showGridLines\"\n        [attr.transform]=\"gridLineTransform()\">\n        <svg:line\n          class=\"gridline-path gridline-path-vertical\"\n          [attr.y1]=\"-gridLineHeight\"\n          y2=\"0\" />\n      </svg:g>\n    </svg:g>\n  ",
+>>>>>>> upstream/master
 =======
             template: "\n    <svg:g #ticksel>\n      <svg:g *ngFor=\"let tick of ticks\" class=\"tick\"\n        [attr.transform]=\"tickTransform(tick)\">\n        <title>{{tickFormat(tick)}}</title>\n        <svg:text\n          stroke-width=\"0.01\"\n          [attr.text-anchor]=\"textAnchor\"\n          [attr.transform]=\"textTransform\"\n          [style.font-size]=\"'12px'\">\n          {{tickTrim(tickFormat(tick))}}\n        </svg:text>\n      </svg:g>\n    </svg:g>\n\n    <svg:g *ngFor=\"let tick of ticks\"\n      [attr.transform]=\"tickTransform(tick)\">\n      <svg:g *ngIf=\"showGridLines\"\n        [attr.transform]=\"gridLineTransform()\">\n        <svg:line\n          class=\"gridline-path gridline-path-vertical\"\n          [attr.y1]=\"-gridLineHeight\"\n          y2=\"0\" />\n      </svg:g>\n    </svg:g>\n  ",
 >>>>>>> upstream/master

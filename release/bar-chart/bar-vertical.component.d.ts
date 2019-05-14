@@ -32,6 +32,7 @@ export declare class BarVerticalComponent extends BaseChartComponent {
     yScaleMax: number;
     yScaleMin: number;
 <<<<<<< HEAD
+<<<<<<< HEAD
     fontSize: number;
     fontFamily: string;
     xAxisFontFamily: string;
@@ -40,6 +41,10 @@ export declare class BarVerticalComponent extends BaseChartComponent {
     xAxisLabelRotationAngle: number;
     yAxisFontFamily: string;
     yAxisFontSize: number;
+=======
+    showDataLabel: boolean;
+    dataLabelFormatting: any;
+>>>>>>> upstream/master
 =======
     showDataLabel: boolean;
     dataLabelFormatting: any;
@@ -72,8 +77,12 @@ export declare class BarVerticalComponent extends BaseChartComponent {
         domain: any[];
         title: any;
 <<<<<<< HEAD
+<<<<<<< HEAD
         fontSize: number;
         fontFamily: string;
+=======
+        position: string;
+>>>>>>> upstream/master
 =======
         position: string;
 >>>>>>> upstream/master

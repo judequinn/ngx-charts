@@ -12,10 +12,14 @@ export declare class XAxisTicksComponent implements OnChanges, AfterViewInit {
     gridLineHeight: any;
     width: any;
 <<<<<<< HEAD
+<<<<<<< HEAD
     fontFamily: string;
     fontSize: number;
     maxLabelLength: number;
     labelRotationAngle: number;
+=======
+    rotateTicks: boolean;
+>>>>>>> upstream/master
 =======
     rotateTicks: boolean;
 >>>>>>> upstream/master

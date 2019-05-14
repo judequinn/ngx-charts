@@ -8,8 +8,12 @@ export declare class LegendComponent implements OnChanges {
     width: any;
     activeEntries: any;
 <<<<<<< HEAD
+<<<<<<< HEAD
     fontFamily: string;
     fontSize: number;
+=======
+    horizontal: boolean;
+>>>>>>> upstream/master
 =======
     horizontal: boolean;
 >>>>>>> upstream/master

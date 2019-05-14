@@ -17,8 +17,12 @@ export declare class YAxisComponent implements OnChanges {
     showRefLines: any;
     showRefLabels: any;
 <<<<<<< HEAD
+<<<<<<< HEAD
     fontFamily: string;
     fontSize: number;
+=======
+    yAxisOffset: number;
+>>>>>>> upstream/master
 =======
     yAxisOffset: number;
 >>>>>>> upstream/master
