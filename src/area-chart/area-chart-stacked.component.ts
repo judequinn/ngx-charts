@@ -16,7 +16,7 @@ import { calculateViewDimensions, ViewDimensions } from '../common/view-dimensio
 import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
 import { id } from '../utils/id';
-import { getUniqueXDomainValues } from '../common/domain.helper';
+import { getUniqueXDomainValues, getScaleType } from '../common/domain.helper';
 
 @Component({
   selector: 'ngx-charts-area-chart-stacked',
@@ -29,47 +29,56 @@ import { getUniqueXDomainValues } from '../common/domain.helper';
       [animations]="animations"
       (legendLabelClick)="onClick($event)"
       (legendLabelActivate)="onActivate($event)"
-      (legendLabelDeactivate)="onDeactivate($event)">
+      (legendLabelDeactivate)="onDeactivate($event)"
+    >
       <svg:defs>
         <svg:clipPath [attr.id]="clipPathId">
           <svg:rect
             [attr.width]="dims.width + 10"
             [attr.height]="dims.height + 10"
-            [attr.transform]="'translate(-5, -5)'"/>
+            [attr.transform]="'translate(-5, -5)'"
+          />
         </svg:clipPath>
       </svg:defs>
       <svg:g [attr.transform]="transform" class="area-chart chart">
-        <svg:g ngx-charts-x-axis
+        <svg:g
+          ngx-charts-x-axis
           *ngIf="xAxis"
           [xScale]="xScale"
           [dims]="dims"
           [showGridLines]="showGridLines"
           [showLabel]="showXAxisLabel"
           [labelText]="xAxisLabel"
+          [trimTicks]="trimXAxisTicks"
+          [rotateTicks]="rotateXAxisTicks"
+          [maxTickLength]="maxXAxisTickLength"
           [tickFormatting]="xAxisTickFormatting"
           [ticks]="xAxisTicks"
           [fontFamily]="xAxisFontFamily"
           [fontSize]="xAxisFontSize"
           [labelRotationAngle]="xAxisLabelRotationAngle"
-          [maxLabelLength]="xAxisMaxLabelLength"
-          (dimensionsChanged)="updateXAxisHeight($event)">
-        </svg:g>
-        <svg:g ngx-charts-y-axis
+          (dimensionsChanged)="updateXAxisHeight($event)"
+        ></svg:g>
+        <svg:g
+          ngx-charts-y-axis
           *ngIf="yAxis"
           [yScale]="yScale"
           [dims]="dims"
           [showGridLines]="showGridLines"
           [showLabel]="showYAxisLabel"
           [labelText]="yAxisLabel"
+          [trimTicks]="trimYAxisTicks"
+          [maxTickLength]="maxYAxisTickLength"
           [tickFormatting]="yAxisTickFormatting"
           [ticks]="yAxisTicks"
           [fontFamily]="yAxisFontFamily"
           [fontSize]="yAxisFontSize"
-          (dimensionsChanged)="updateYAxisWidth($event)">
-        </svg:g>
+          (dimensionsChanged)="updateYAxisWidth($event)"
+        ></svg:g>
         <svg:g [attr.clip-path]="clipPath">
-          <svg:g *ngFor="let series of results; trackBy:trackBy">
-            <svg:g ngx-charts-area-series
+          <svg:g *ngFor="let series of results; trackBy: trackBy">
+            <svg:g
+              ngx-charts-area-series
               [xScale]="xScale"
               [yScale]="yScale"
               [colors]="colors"
@@ -84,7 +93,8 @@ import { getUniqueXDomainValues } from '../common/domain.helper';
           </svg:g>
 
           <svg:g *ngIf="!tooltipDisabled" (mouseleave)="hideCircles()">
-            <svg:g ngx-charts-tooltip-area
+            <svg:g
+              ngx-charts-tooltip-area
               [dims]="dims"
               [xSet]="xSet"
               [xScale]="xScale"
@@ -98,8 +108,9 @@ import { getUniqueXDomainValues } from '../common/domain.helper';
               (hover)="updateHoveredVertical($event)"
             />
 
-            <svg:g *ngFor="let series of results; trackBy:trackBy">
-              <svg:g ngx-charts-circle-series
+            <svg:g *ngFor="let series of results; trackBy: trackBy">
+              <svg:g
+                ngx-charts-circle-series
                 type="stacked"
                 [xScale]="xScale"
                 [yScale]="yScale"
@@ -120,7 +131,8 @@ import { getUniqueXDomainValues } from '../common/domain.helper';
           </svg:g>
         </svg:g>
       </svg:g>
-      <svg:g ngx-charts-timeline
+      <svg:g
+        ngx-charts-timeline
         *ngIf="timeline && scaleType != 'ordinal'"
         [attr.transform]="timelineTransform"
         [results]="results"
@@ -130,9 +142,11 @@ import { getUniqueXDomainValues } from '../common/domain.helper';
         [customColors]="customColors"
         [legend]="legend"
         [scaleType]="scaleType"
-        (onDomainChange)="updateDomain($event)">
-        <svg:g *ngFor="let series of results; trackBy:trackBy">
-          <svg:g ngx-charts-area-series
+        (onDomainChange)="updateDomain($event)"
+      >
+        <svg:g *ngFor="let series of results; trackBy: trackBy">
+          <svg:g
+            ngx-charts-area-series
             [xScale]="timelineXScale"
             [yScale]="timelineYScale"
             [colors]="colors"
@@ -152,9 +166,9 @@ import { getUniqueXDomainValues } from '../common/domain.helper';
   encapsulation: ViewEncapsulation.None
 })
 export class AreaChartStackedComponent extends BaseChartComponent {
-
   @Input() legend = false;
   @Input() legendTitle: string = 'Legend';
+  @Input() legendPosition: string = 'right';
   @Input() xAxis;
   @Input() yAxis;
   @Input() showXAxisLabel;
@@ -167,6 +181,11 @@ export class AreaChartStackedComponent extends BaseChartComponent {
   @Input() curve: any = curveLinear;
   @Input() activeEntries: any[] = [];
   @Input() schemeType: string;
+  @Input() trimXAxisTicks: boolean = true;
+  @Input() trimYAxisTicks: boolean = true;
+  @Input() rotateXAxisTicks: boolean = true;
+  @Input() maxXAxisTickLength: number = 16;
+  @Input() maxYAxisTickLength: number = 16;
   @Input() xAxisTickFormatting: any;
   @Input() yAxisTickFormatting: any;
   @Input() xAxisTicks: any[];
@@ -181,7 +200,6 @@ export class AreaChartStackedComponent extends BaseChartComponent {
   @Input() fontFamily: string;
   @Input() xAxisFontFamily: string;
   @Input() xAxisFontSize: number;
-  @Input() xAxisMaxLabelLength: number;
   @Input() xAxisLabelRotationAngle: number;
   @Input() yAxisFontFamily: string;
   @Input() yAxisFontSize: number;
@@ -233,11 +251,12 @@ export class AreaChartStackedComponent extends BaseChartComponent {
       showXLabel: this.showXAxisLabel,
       showYLabel: this.showYAxisLabel,
       showLegend: this.legend,
-      legendType: this.schemeType
+      legendType: this.schemeType,
+      legendPosition: this.legendPosition
     });
 
     if (this.timeline) {
-      this.dims.height -= (this.timelineHeight + this.margin[2] + this.timelinePadding);
+      this.dims.height -= this.timelineHeight + this.margin[2] + this.timelinePadding;
     }
 
     this.xDomain = this.getXDomain();
@@ -255,7 +274,6 @@ export class AreaChartStackedComponent extends BaseChartComponent {
       const val = this.xSet[i];
       let d0 = 0;
       for (const group of this.results) {
-
         let d = group.series.find(item => {
           let a = item.name;
           let b = val;
@@ -287,7 +305,7 @@ export class AreaChartStackedComponent extends BaseChartComponent {
     this.setColors();
     this.legendOptions = this.getLegendOptions();
 
-    this.transform = `translate(${ this.dims.xOffset } , ${ this.margin[0] })`;
+    this.transform = `translate(${this.dims.xOffset} , ${this.margin[0]})`;
 
     this.clipPathId = 'clip' + id().toString();
     this.clipPath = `url(#${this.clipPathId})`;
@@ -299,14 +317,14 @@ export class AreaChartStackedComponent extends BaseChartComponent {
       this.timelineXDomain = this.getXDomain();
       this.timelineXScale = this.getXScale(this.timelineXDomain, this.timelineWidth);
       this.timelineYScale = this.getYScale(this.yDomain, this.timelineHeight);
-      this.timelineTransform = `translate(${ this.dims.xOffset }, ${ -this.margin[2] })`;
+      this.timelineTransform = `translate(${this.dims.xOffset}, ${-this.margin[2]})`;
     }
   }
 
   getXDomain(): any[] {
     let values = getUniqueXDomainValues(this.results);
 
-    this.scaleType = this.getScaleType(values);
+    this.scaleType = getScaleType(values);
     let domain = [];
 
     if (this.scaleType === 'linear') {
@@ -316,13 +334,9 @@ export class AreaChartStackedComponent extends BaseChartComponent {
     let min;
     let max;
     if (this.scaleType === 'time' || this.scaleType === 'linear') {
-      min = this.xScaleMin
-        ? this.xScaleMin
-        : Math.min(...values);
+      min = this.xScaleMin ? this.xScaleMin : Math.min(...values);
 
-      max = this.xScaleMax
-        ? this.xScaleMax
-        : Math.max(...values);
+      max = this.xScaleMax ? this.xScaleMax : Math.max(...values);
     }
 
     if (this.scaleType === 'time') {
@@ -337,7 +351,7 @@ export class AreaChartStackedComponent extends BaseChartComponent {
     } else if (this.scaleType === 'linear') {
       domain = [min, max];
       // Use compare function to sort numbers numerically
-      this.xSet = [...values].sort((a, b) => (a - b));
+      this.xSet = [...values].sort((a, b) => a - b);
     } else {
       domain = values;
       this.xSet = values;
@@ -371,13 +385,9 @@ export class AreaChartStackedComponent extends BaseChartComponent {
       domain.push(sum);
     }
 
-    const min = this.yScaleMin
-      ? this.yScaleMin
-      : Math.min(0, ...domain);
+    const min = this.yScaleMin ? this.yScaleMin : Math.min(0, ...domain);
 
-    const max = this.yScaleMax
-      ? this.yScaleMax
-      : Math.max(...domain);
+    const max = this.yScaleMax ? this.yScaleMax : Math.max(...domain);
     return [min, max];
   }
 
@@ -393,13 +403,10 @@ export class AreaChartStackedComponent extends BaseChartComponent {
     } else if (this.scaleType === 'linear') {
       scale = scaleLinear();
     } else if (this.scaleType === 'ordinal') {
-      scale = scalePoint()
-        .padding(0.1);
+      scale = scalePoint().padding(0.1);
     }
 
-    scale
-      .range([0, width])
-      .domain(domain);
+    scale.range([0, width]).domain(domain);
 
     return this.roundDomains ? scale.nice() : scale;
   }
@@ -409,38 +416,6 @@ export class AreaChartStackedComponent extends BaseChartComponent {
       .range([height, 0])
       .domain(domain);
     return this.roundDomains ? scale.nice() : scale;
-  }
-
-  getScaleType(values): string {
-    let date = true;
-    let num = true;
-
-    for (const value of values) {
-      if (!this.isDate(value)) {
-        date = false;
-      }
-      if (typeof value !== 'number') {
-        num = false;
-      }
-    }
-
-    if (date) {
-      return 'time';
-    }
-
-    if (num) {
-      return 'linear';
-    }
-
-    return 'ordinal';
-  }
-
-  isDate(value): boolean {
-    if (value instanceof Date) {
-      return true;
-    }
-
-    return false;
   }
 
   updateDomain(domain): void {
@@ -488,7 +463,8 @@ export class AreaChartStackedComponent extends BaseChartComponent {
       scaleType: this.schemeType,
       colors: undefined,
       domain: [],
-      title: undefined
+      title: undefined,
+      position: this.legendPosition
     };
     if (opts.scaleType === 'ordinal') {
       opts.domain = this.seriesDomain;
@@ -519,7 +495,7 @@ export class AreaChartStackedComponent extends BaseChartComponent {
       return;
     }
 
-    this.activeEntries = [ item, ...this.activeEntries ];
+    this.activeEntries = [item, ...this.activeEntries];
     this.activate.emit({ value: item, entries: this.activeEntries });
   }
 
@@ -541,5 +517,4 @@ export class AreaChartStackedComponent extends BaseChartComponent {
     }
     this.activeEntries = [];
   }
-
 }

@@ -5,6 +5,8 @@ export declare class YAxisTicksComponent implements OnChanges, AfterViewInit {
     tickArguments: number[];
     tickValues: any[];
     tickStroke: string;
+    trimTicks: boolean;
+    maxTickLength: number;
     tickFormatting: any;
     showGridLines: boolean;
     gridLineWidth: any;
@@ -32,13 +34,11 @@ export declare class YAxisTicksComponent implements OnChanges, AfterViewInit {
     width: number;
     outerTickSize: number;
     rotateLabels: boolean;
-    trimLabel: any;
     refMax: number;
     refMin: number;
     referenceLineLength: number;
     referenceAreaPath: string;
     ticksElement: ElementRef;
-    constructor();
     ngOnChanges(changes: SimpleChanges): void;
     ngAfterViewInit(): void;
     updateDims(): void;
@@ -48,4 +48,5 @@ export declare class YAxisTicksComponent implements OnChanges, AfterViewInit {
     getMaxTicks(tickHeight: number): number;
     tickTransform(tick: any): string;
     gridLineTransform(): string;
+    tickTrim(label: string): string;
 }

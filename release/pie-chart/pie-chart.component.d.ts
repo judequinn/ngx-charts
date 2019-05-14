@@ -5,6 +5,7 @@ export declare class PieChartComponent extends BaseChartComponent {
     labels: boolean;
     legend: boolean;
     legendTitle: string;
+    legendPosition: string;
     explodeSlices: boolean;
     doughnut: boolean;
     arcWidth: number;
@@ -15,8 +16,12 @@ export declare class PieChartComponent extends BaseChartComponent {
     trimLabels: boolean;
     maxLabelLength: number;
     tooltipText: any;
+<<<<<<< HEAD
     fontSize: number;
     fontFamily: string;
+=======
+    dblclick: EventEmitter<{}>;
+>>>>>>> upstream/master
     select: EventEmitter<{}>;
     activate: EventEmitter<any>;
     deactivate: EventEmitter<any>;
@@ -39,8 +44,12 @@ export declare class PieChartComponent extends BaseChartComponent {
         domain: any;
         colors: ColorHelper;
         title: string;
+<<<<<<< HEAD
         fontSize: number;
         fontFamily: string;
+=======
+        position: string;
+>>>>>>> upstream/master
     };
     onActivate(item: any): void;
     onDeactivate(item: any): void;

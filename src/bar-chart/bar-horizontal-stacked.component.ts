@@ -41,6 +41,9 @@ import { BaseChartComponent } from '../common/base-chart.component';
           [showGridLines]="showGridLines"
           [showLabel]="showXAxisLabel"
           [labelText]="xAxisLabel"
+          [trimTicks]="trimXAxisTicks"
+          [rotateTicks]="rotateXAxisTicks"
+          [maxTickLength]="maxXAxisTickLength"
           [tickFormatting]="xAxisTickFormatting"
           [ticks]="xAxisTicks"
           (dimensionsChanged)="updateXAxisHeight($event)">
@@ -51,12 +54,15 @@ import { BaseChartComponent } from '../common/base-chart.component';
           [dims]="dims"
           [showLabel]="showYAxisLabel"
           [labelText]="yAxisLabel"
+          [trimTicks]="trimYAxisTicks"
+          [maxTickLength]="maxYAxisTickLength"
           [tickFormatting]="yAxisTickFormatting"
           [ticks]="yAxisTicks"
+          [yAxisOffset]="dataLabelMaxWidth.negative"
           (dimensionsChanged)="updateYAxisWidth($event)">
         </svg:g>
         <svg:g
-          *ngFor="let group of results; trackBy:trackBy"
+          *ngFor="let group of results; let index = index; trackBy:trackBy"
           [@animationState]="'active'"
           [attr.transform]="groupTransform(group)">
           <svg:g ngx-charts-series-horizontal
@@ -72,9 +78,12 @@ import { BaseChartComponent } from '../common/base-chart.component';
             [tooltipTemplate]="tooltipTemplate"
             [seriesName]="group.name"
             [animations]="animations"
+            [showDataLabel]="showDataLabel"
+            [dataLabelFormatting]="dataLabelFormatting"
             (select)="onClick($event, group)"
             (activate)="onActivate($event, group)"
             (deactivate)="onDeactivate($event, group)"
+            (dataLabelWidthChanged)="onDataLabelMaxWidthChanged($event, index)"
           />
         </svg:g>
       </svg:g>
@@ -99,6 +108,7 @@ export class BarHorizontalStackedComponent extends BaseChartComponent {
 
   @Input() legend = false;
   @Input() legendTitle: string = 'Legend';
+  @Input() legendPosition: string = 'right';
   @Input() xAxis;
   @Input() yAxis;
   @Input() showXAxisLabel;
@@ -110,6 +120,11 @@ export class BarHorizontalStackedComponent extends BaseChartComponent {
   @Input() showGridLines: boolean = true;
   @Input() activeEntries: any[] = [];
   @Input() schemeType: string;
+  @Input() trimXAxisTicks: boolean = true;
+  @Input() trimYAxisTicks: boolean = true;
+  @Input() rotateXAxisTicks: boolean = true;
+  @Input() maxXAxisTickLength: number = 16;
+  @Input() maxYAxisTickLength: number = 16;
   @Input() xAxisTickFormatting: any;
   @Input() yAxisTickFormatting: any;
   @Input() xAxisTicks: any[];
@@ -117,6 +132,8 @@ export class BarHorizontalStackedComponent extends BaseChartComponent {
   @Input() barPadding = 8;
   @Input() roundDomains: boolean = false;
   @Input() xScaleMax: number;
+  @Input() showDataLabel: boolean = false;
+  @Input() dataLabelFormatting: any;
 
   @Output() activate: EventEmitter<any> = new EventEmitter();
   @Output() deactivate: EventEmitter<any> = new EventEmitter();
@@ -135,9 +152,16 @@ export class BarHorizontalStackedComponent extends BaseChartComponent {
   xAxisHeight: number = 0;
   yAxisWidth: number = 0;
   legendOptions: any;
+  dataLabelMaxWidth: any = {negative: 0, positive: 0};
 
   update(): void {
     super.update();
+
+    if (!this.showDataLabel) {
+      this.dataLabelMaxWidth = {negative: 0, positive: 0};          
+    }
+
+    this.margin = [10, 20 + this.dataLabelMaxWidth.positive, 10, 20 + this.dataLabelMaxWidth.negative]; 
 
     this.dims = calculateViewDimensions({
       width: this.width,
@@ -150,7 +174,8 @@ export class BarHorizontalStackedComponent extends BaseChartComponent {
       showXLabel: this.showXAxisLabel,
       showYLabel: this.showYAxisLabel,
       showLegend: this.legend,
-      legendType: this.schemeType
+      legendType: this.schemeType,
+      legendPosition: this.legendPosition
     });
 
     this.formatDates();
@@ -271,7 +296,8 @@ export class BarHorizontalStackedComponent extends BaseChartComponent {
       scaleType: this.schemeType,
       colors: undefined,
       domain: [],
-      title: undefined
+      title: undefined,
+      position: this.legendPosition
     };
     if (opts.scaleType === 'ordinal') {
       opts.domain = this.innerDomain;
@@ -293,6 +319,17 @@ export class BarHorizontalStackedComponent extends BaseChartComponent {
   updateXAxisHeight({ height }): void {
     this.xAxisHeight = height;
     this.update();
+  }
+
+  onDataLabelMaxWidthChanged(event, groupIndex) {                
+    if (event.size.negative)  {
+      this.dataLabelMaxWidth.negative = Math.max(this.dataLabelMaxWidth.negative, event.size.width);
+    } else {
+      this.dataLabelMaxWidth.positive = Math.max(this.dataLabelMaxWidth.positive, event.size.width);
+    }  
+    if (groupIndex === (this.results.length - 1)) {
+      setTimeout(() => this.update());
+    }        
   }
 
   onActivate(event, group?) {

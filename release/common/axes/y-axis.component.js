@@ -13,27 +13,32 @@ var YAxisComponent = /** @class */ (function () {
     function YAxisComponent() {
         this.showGridLines = false;
         this.yOrient = 'left';
+<<<<<<< HEAD
         this.fontFamily = 'initial';
         this.fontSize = 12;
+=======
+        this.yAxisOffset = 0;
+>>>>>>> upstream/master
         this.dimensionsChanged = new EventEmitter();
         this.yAxisClassName = 'y axis';
-        this.yAxisOffset = -5;
         this.labelOffset = 15;
         this.fill = 'none';
         this.stroke = '#CCC';
         this.tickStroke = '#CCC';
         this.strokeWidth = 1;
+        this.padding = 5;
     }
     YAxisComponent.prototype.ngOnChanges = function (changes) {
         this.update();
     };
     YAxisComponent.prototype.update = function () {
-        this.offset = this.yAxisOffset;
+        this.offset = -(this.yAxisOffset + this.padding);
         if (this.yOrient === 'right') {
             this.labelOffset = 65;
             this.transform = "translate(" + (this.offset + this.dims.width) + " , 0)";
         }
         else {
+            this.offset = this.offset;
             this.transform = "translate(" + this.offset + " , 0)";
         }
         if (this.yAxisTickCount !== undefined) {
@@ -64,6 +69,14 @@ var YAxisComponent = /** @class */ (function () {
         Input(),
         __metadata("design:type", Object)
     ], YAxisComponent.prototype, "dims", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], YAxisComponent.prototype, "trimTicks", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], YAxisComponent.prototype, "maxTickLength", void 0);
     __decorate([
         Input(),
         __metadata("design:type", Object)
@@ -110,12 +123,17 @@ var YAxisComponent = /** @class */ (function () {
     ], YAxisComponent.prototype, "showRefLabels", void 0);
     __decorate([
         Input(),
+<<<<<<< HEAD
         __metadata("design:type", String)
     ], YAxisComponent.prototype, "fontFamily", void 0);
     __decorate([
         Input(),
         __metadata("design:type", Number)
     ], YAxisComponent.prototype, "fontSize", void 0);
+=======
+        __metadata("design:type", Number)
+    ], YAxisComponent.prototype, "yAxisOffset", void 0);
+>>>>>>> upstream/master
     __decorate([
         Output(),
         __metadata("design:type", Object)
@@ -127,7 +145,11 @@ var YAxisComponent = /** @class */ (function () {
     YAxisComponent = __decorate([
         Component({
             selector: 'g[ngx-charts-y-axis]',
+<<<<<<< HEAD
             template: "\n    <svg:g\n      [attr.class]=\"yAxisClassName\"\n      [attr.transform]=\"transform\">\n      <svg:g ngx-charts-y-axis-ticks\n        *ngIf=\"yScale\"\n        [tickFormatting]=\"tickFormatting\"\n        [tickArguments]=\"tickArguments\"\n        [tickValues]=\"ticks\"\n        [tickStroke]=\"tickStroke\"\n        [scale]=\"yScale\"\n        [orient]=\"yOrient\"\n        [showGridLines]=\"showGridLines\"\n        [gridLineWidth]=\"dims.width\"\n        [referenceLines]=\"referenceLines\"\n        [showRefLines]=\"showRefLines\"\n        [showRefLabels]=\"showRefLabels\"\n        [height]=\"dims.height\"\n        [fontFamily]=\"fontFamily\"\n        [fontSize]=\"fontSize || 12\"\n        (dimensionsChanged)=\"emitTicksWidth($event)\"\n      />\n\n      <svg:g ngx-charts-axis-label\n        *ngIf=\"showLabel\"\n        [label]=\"labelText\"\n        [offset]=\"labelOffset\"\n        [orient]=\"yOrient\"\n        [height]=\"dims.height\"\n        [width]=\"dims.width\">\n      </svg:g>\n    </svg:g>\n  ",
+=======
+            template: "\n    <svg:g\n      [attr.class]=\"yAxisClassName\"\n      [attr.transform]=\"transform\">\n      <svg:g ngx-charts-y-axis-ticks\n        *ngIf=\"yScale\"\n        [trimTicks]=\"trimTicks\"\n        [maxTickLength]=\"maxTickLength\"\n        [tickFormatting]=\"tickFormatting\"\n        [tickArguments]=\"tickArguments\"\n        [tickValues]=\"ticks\"\n        [tickStroke]=\"tickStroke\"\n        [scale]=\"yScale\"\n        [orient]=\"yOrient\"\n        [showGridLines]=\"showGridLines\"\n        [gridLineWidth]=\"dims.width\"\n        [referenceLines]=\"referenceLines\"\n        [showRefLines]=\"showRefLines\"\n        [showRefLabels]=\"showRefLabels\"\n        [height]=\"dims.height\"\n        (dimensionsChanged)=\"emitTicksWidth($event)\"\n      />\n\n      <svg:g ngx-charts-axis-label\n        *ngIf=\"showLabel\"\n        [label]=\"labelText\"\n        [offset]=\"labelOffset\"\n        [orient]=\"yOrient\"\n        [height]=\"dims.height\"\n        [width]=\"dims.width\">\n      </svg:g>\n    </svg:g>\n  ",
+>>>>>>> upstream/master
             changeDetection: ChangeDetectionStrategy.OnPush
         })
     ], YAxisComponent);

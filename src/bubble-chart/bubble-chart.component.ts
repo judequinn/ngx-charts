@@ -9,18 +9,14 @@ import {
   ContentChild,
   TemplateRef
 } from '@angular/core';
-import {
-  trigger,
-  style,
-  animate,
-  transition
-} from '@angular/animations';
+import { trigger, style, animate, transition } from '@angular/animations';
 import { scaleLinear } from 'd3-scale';
 
 import { BaseChartComponent } from '../common/base-chart.component';
 import { calculateViewDimensions, ViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
-import { getScaleType, getDomain, getScale } from './bubble-chart.utils';
+import { getScaleType } from '../common/domain.helper';
+import { getDomain, getScale } from './bubble-chart.utils';
 import { id } from '../utils/id';
 
 @Component({
@@ -34,42 +30,52 @@ import { id } from '../utils/id';
       [animations]="animations"
       (legendLabelClick)="onClick($event)"
       (legendLabelActivate)="onActivate($event)"
-      (legendLabelDeactivate)="onDeactivate($event)">
+      (legendLabelDeactivate)="onDeactivate($event)"
+    >
       <svg:defs>
         <svg:clipPath [attr.id]="clipPathId">
           <svg:rect
             [attr.width]="dims.width + 10"
             [attr.height]="dims.height + 10"
-            [attr.transform]="'translate(-5, -5)'"/>
+            [attr.transform]="'translate(-5, -5)'"
+          />
         </svg:clipPath>
       </svg:defs>
       <svg:g [attr.transform]="transform" class="bubble-chart chart">
-        <svg:g ngx-charts-x-axis
+        <svg:g
+          ngx-charts-x-axis
           *ngIf="xAxis"
           [showGridLines]="showGridLines"
           [dims]="dims"
           [xScale]="xScale"
           [showLabel]="showXAxisLabel"
           [labelText]="xAxisLabel"
+          [trimTicks]="trimXAxisTicks"
+          [rotateTicks]="rotateXAxisTicks"
+          [maxTickLength]="maxXAxisTickLength"
           [tickFormatting]="xAxisTickFormatting"
           [ticks]="xAxisTicks"
           [fontFamily]="xAxisFontFamily"
           [fontSize]="xAxisFontSize"
           [labelRotationAngle]="xAxisLabelRotationAngle"
-          [maxLabelLength]="xAxisMaxLabelLength"
-          (dimensionsChanged)="updateXAxisHeight($event)"/>
-        <svg:g ngx-charts-y-axis
+          (dimensionsChanged)="updateXAxisHeight($event)"
+        />
+        <svg:g
+          ngx-charts-y-axis
           *ngIf="yAxis"
           [showGridLines]="showGridLines"
           [yScale]="yScale"
           [dims]="dims"
           [showLabel]="showYAxisLabel"
           [labelText]="yAxisLabel"
+          [trimTicks]="trimYAxisTicks"
+          [maxTickLength]="maxYAxisTickLength"
           [tickFormatting]="yAxisTickFormatting"
           [ticks]="yAxisTicks"
           [fontFamily]="yAxisFontFamily"
           [fontSize]="yAxisFontSize"
-          (dimensionsChanged)="updateYAxisWidth($event)"/>
+          (dimensionsChanged)="updateYAxisWidth($event)"
+        />
         <svg:rect
           class="bubble-chart-area"
           x="0"
@@ -80,8 +86,9 @@ import { id } from '../utils/id';
           (mouseenter)="deactivateAll()"
         />
         <svg:g [attr.clip-path]="clipPath">
-          <svg:g *ngFor="let series of data; trackBy:trackBy" [@animationState]="'active'">
-            <svg:g ngx-charts-bubble-series
+          <svg:g *ngFor="let series of data; trackBy: trackBy" [@animationState]="'active'">
+            <svg:g
+              ngx-charts-bubble-series
               [xScale]="xScale"
               [yScale]="yScale"
               [rScale]="rScale"
@@ -98,7 +105,8 @@ import { id } from '../utils/id';
               [tooltipFontSize]="fontSize"
               (select)="onClick($event, series)"
               (activate)="onActivate($event)"
-              (deactivate)="onDeactivate($event)" />
+              (deactivate)="onDeactivate($event)"
+            />
           </svg:g>
         </svg:g>
       </svg:g>
@@ -111,11 +119,14 @@ import { id } from '../utils/id';
     trigger('animationState', [
       transition(':leave', [
         style({
-          opacity: 1,
+          opacity: 1
         }),
-        animate(500, style({
-          opacity: 0
-        }))
+        animate(
+          500,
+          style({
+            opacity: 0
+          })
+        )
       ])
     ])
   ]
@@ -124,12 +135,18 @@ export class BubbleChartComponent extends BaseChartComponent {
   @Input() showGridLines: boolean = true;
   @Input() legend = false;
   @Input() legendTitle: string = 'Legend';
+  @Input() legendPosition: string = 'right';
   @Input() xAxis: boolean = true;
   @Input() yAxis: boolean = true;
   @Input() showXAxisLabel: boolean;
   @Input() showYAxisLabel: boolean;
   @Input() xAxisLabel: string;
   @Input() yAxisLabel: string;
+  @Input() trimXAxisTicks: boolean = true;
+  @Input() trimYAxisTicks: boolean = true;
+  @Input() rotateXAxisTicks: boolean = true;
+  @Input() maxXAxisTickLength: number = 16;
+  @Input() maxYAxisTickLength: number = 16;
   @Input() xAxisTickFormatting: any;
   @Input() yAxisTickFormatting: any;
   @Input() xAxisTicks: any[];
@@ -139,7 +156,6 @@ export class BubbleChartComponent extends BaseChartComponent {
   @Input() minRadius = 3;
   @Input() autoScale: boolean;
   @Input() schemeType = 'ordinal';
-  @Input() legendPosition: string = 'right';
   @Input() tooltipDisabled: boolean = false;
   @Input() xScaleMin: any;
   @Input() xScaleMax: any;
@@ -149,7 +165,6 @@ export class BubbleChartComponent extends BaseChartComponent {
   @Input() fontFamily: string;
   @Input() xAxisFontFamily: string;
   @Input() xAxisFontSize: number;
-  @Input() xAxisMaxLabelLength: number;
   @Input() xAxisLabelRotationAngle: number;
   @Input() yAxisFontFamily: string;
   @Input() yAxisFontSize: number;
@@ -203,7 +218,8 @@ export class BubbleChartComponent extends BaseChartComponent {
       showXLabel: this.showXAxisLabel,
       showYLabel: this.showYAxisLabel,
       showLegend: this.legend,
-      legendType: this.schemeType
+      legendType: this.schemeType,
+      legendPosition: this.legendPosition
     });
 
     this.seriesDomain = this.results.map(d => d.name);
@@ -211,7 +227,7 @@ export class BubbleChartComponent extends BaseChartComponent {
     this.xDomain = this.getXDomain();
     this.yDomain = this.getYDomain();
 
-    this.transform = `translate(${ this.dims.xOffset },${ this.margin[0] })`;
+    this.transform = `translate(${this.dims.xOffset},${this.margin[0]})`;
 
     const colorDomain = this.schemeType === 'ordinal' ? this.seriesDomain : this.rDomain;
     this.colors = new ColorHelper(this.scheme, this.schemeType, colorDomain, this.customColors);
@@ -257,8 +273,8 @@ export class BubbleChartComponent extends BaseChartComponent {
     for (const s of this.data) {
       for (const d of s.series) {
         const r = this.rScale(d.r);
-        const cx = (this.xScaleType === 'linear') ? this.xScale(Number(d.x)) : this.xScale(d.x);
-        const cy = (this.yScaleType === 'linear') ? this.yScale(Number(d.y)) : this.yScale(d.y);
+        const cx = this.xScaleType === 'linear' ? this.xScale(Number(d.x)) : this.xScale(d.x);
+        const cy = this.yScaleType === 'linear' ? this.yScale(Number(d.y)) : this.yScale(d.y);
         xMin = Math.max(r - cx, xMin);
         yMin = Math.max(r - cy, yMin);
         yMax = Math.max(cy + r, yMax);
@@ -387,7 +403,7 @@ export class BubbleChartComponent extends BaseChartComponent {
       return;
     }
 
-    this.activeEntries = [ item, ...this.activeEntries ];
+    this.activeEntries = [item, ...this.activeEntries];
     this.activate.emit({ value: item, entries: this.activeEntries });
   }
 

@@ -1,26 +1,25 @@
 import {
-  Component,
-  Input,
-  Output,
-  OnChanges,
-  ElementRef,
-  ViewChild,
-  EventEmitter,
   AfterViewInit,
   ChangeDetectionStrategy,
-  SimpleChanges
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
+import { roundedRect } from '../../common/shape.helper';
 import { trimLabel } from '../trim-label.helper';
 import { reduceTicks } from './ticks.helper';
-import { roundedRect } from '../../common/shape.helper';
 
 @Component({
   selector: 'g[ngx-charts-y-axis-ticks]',
   template: `
     <svg:g #ticksel>
-      <svg:g *ngFor="let tick of ticks" class="tick"
-        [attr.transform]="transform(tick)" >
-        <title>{{tickFormat(tick)}}</title>
+      <svg:g *ngFor="let tick of ticks" class="tick" [attr.transform]="transform(tick)">
+        <title>{{ tickFormat(tick) }}</title>
         <svg:text
           stroke-width="0.01"
           [attr.dy]="dy"
@@ -28,48 +27,54 @@ import { roundedRect } from '../../common/shape.helper';
           [attr.y]="y1"
           [attr.text-anchor]="textAnchor"
           [style.font-size]="fontSize + 'px'"
-          [style.font-family]="fontFamily">
-          {{trimLabel(tickFormat(tick), maxLabelLength)}}
+          [style.font-family]="fontFamily"
+        >
+          {{ tickTrim(tickFormat(tick)) }}
         </svg:text>
       </svg:g>
     </svg:g>
 
-    <svg:path *ngIf="referenceLineLength > 1 && refMax && refMin && showRefLines"
+    <svg:path
+      *ngIf="referenceLineLength > 1 && refMax && refMin && showRefLines"
       class="reference-area"
       [attr.d]="referenceAreaPath"
       [attr.transform]="gridLineTransform()"
     />
-    <svg:g *ngFor="let tick of ticks"
-      [attr.transform]="transform(tick)">
-      <svg:g
-        *ngIf="showGridLines"
-        [attr.transform]="gridLineTransform()">
-        <svg:line *ngIf="orient === 'left'"
+    <svg:g *ngFor="let tick of ticks" [attr.transform]="transform(tick)">
+      <svg:g *ngIf="showGridLines" [attr.transform]="gridLineTransform()">
+        <svg:line
+          *ngIf="orient === 'left'"
           class="gridline-path gridline-path-horizontal"
           x1="0"
-          [attr.x2]="gridLineWidth" />
-        <svg:line *ngIf="orient === 'right'"
+          [attr.x2]="gridLineWidth"
+        />
+        <svg:line
+          *ngIf="orient === 'right'"
           class="gridline-path gridline-path-horizontal"
           x1="0"
-          [attr.x2]="-gridLineWidth" />
+          [attr.x2]="-gridLineWidth"
+        />
       </svg:g>
     </svg:g>
 
     <svg:g *ngFor="let refLine of referenceLines">
       <svg:g *ngIf="showRefLines" [attr.transform]="transform(refLine.value)">
-        <svg:line class="refline-path gridline-path-horizontal"
+        <svg:line
+          class="refline-path gridline-path-horizontal"
           x1="0"
           [attr.x2]="gridLineWidth"
-          [attr.transform]="gridLineTransform()"/>
+          [attr.transform]="gridLineTransform()"
+        />
         <svg:g *ngIf="showRefLabels">
-          <title>{{trimLabel(tickFormat(refLine.value))}}</title>
+          <title>{{ tickTrim(tickFormat(refLine.value)) }}</title>
           <svg:text
             class="refline-label"
             [attr.dy]="dy"
             [attr.y]="-6"
             [attr.x]="gridLineWidth"
-            [attr.text-anchor]="textAnchor" >
-            {{refLine.name}}
+            [attr.text-anchor]="textAnchor"
+          >
+            {{ refLine.name }}
           </svg:text>
         </svg:g>
       </svg:g>
@@ -78,12 +83,13 @@ import { roundedRect } from '../../common/shape.helper';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class YAxisTicksComponent implements OnChanges, AfterViewInit {
-
   @Input() scale;
   @Input() orient;
   @Input() tickArguments = [5];
   @Input() tickValues: any[];
   @Input() tickStroke = '#ccc';
+  @Input() trimTicks: boolean = true;
+  @Input() maxTickLength: number = 16;
   @Input() tickFormatting;
   @Input() showGridLines = false;
   @Input() gridLineWidth;
@@ -113,17 +119,12 @@ export class YAxisTicksComponent implements OnChanges, AfterViewInit {
   width: number = 0;
   outerTickSize: number = 6;
   rotateLabels: boolean = false;
-  trimLabel: any;
   refMax: number;
   refMin: number;
   referenceLineLength: number = 0;
   referenceAreaPath: string;
 
   @ViewChild('ticksel') ticksElement: ElementRef;
-
-  constructor() {
-    this.trimLabel = trimLabel;
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.update();
@@ -163,9 +164,11 @@ export class YAxisTicksComponent implements OnChanges, AfterViewInit {
       };
     }
 
-    this.adjustedScale = scale.bandwidth ? function(d) {
-      return scale(d) + scale.bandwidth() * 0.5;
-    } : scale;
+    this.adjustedScale = scale.bandwidth
+      ? function(d) {
+          return scale(d) + scale.bandwidth() * 0.5;
+        }
+      : scale;
 
     if (this.showRefLines && this.referenceLines) {
       this.setReferencelines();
@@ -218,14 +221,18 @@ export class YAxisTicksComponent implements OnChanges, AfterViewInit {
     this.refMax = this.adjustedScale(Math.max.apply(null, this.referenceLines.map(item => item.value)));
     this.referenceLineLength = this.referenceLines.length;
 
-    this.referenceAreaPath = roundedRect(0, this.refMax, this.gridLineWidth, this.refMin - this.refMax,
-      0, [false, false, false, false]);
+    this.referenceAreaPath = roundedRect(0, this.refMax, this.gridLineWidth, this.refMin - this.refMax, 0, [
+      false,
+      false,
+      false,
+      false
+    ]);
   }
 
   getTicks(): any {
     let ticks;
     const maxTicks = this.getMaxTicks(20);
-    const maxScaleTicks =  this.getMaxTicks(50);
+    const maxScaleTicks = this.getMaxTicks(50);
 
     if (this.tickValues) {
       ticks = this.tickValues;
@@ -251,4 +258,7 @@ export class YAxisTicksComponent implements OnChanges, AfterViewInit {
     return `translate(5,0)`;
   }
 
+  tickTrim(label: string): string {
+    return this.trimTicks ? trimLabel(label, this.maxTickLength) : label;
+  }
 }

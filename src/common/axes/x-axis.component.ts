@@ -14,11 +14,13 @@ import { XAxisTicksComponent } from './x-axis-ticks.component';
 @Component({
   selector: 'g[ngx-charts-x-axis]',
   template: `
-    <svg:g
-      [attr.class]="xAxisClassName"
-      [attr.transform]="transform">
-      <svg:g ngx-charts-x-axis-ticks
+    <svg:g [attr.class]="xAxisClassName" [attr.transform]="transform">
+      <svg:g
+        ngx-charts-x-axis-ticks
         *ngIf="xScale"
+        [trimTicks]="trimTicks"
+        [rotateTicks]="rotateTicks"
+        [maxTickLength]="maxTickLength"
         [tickFormatting]="tickFormatting"
         [tickArguments]="tickArguments"
         [tickStroke]="tickStroke"
@@ -31,25 +33,27 @@ import { XAxisTicksComponent } from './x-axis-ticks.component';
         [fontFamily]="fontFamily"
         [fontSize]="fontSize || 12"
         [labelRotationAngle]="labelRotationAngle"
-        [maxLabelLength]="maxLabelLength"
         (dimensionsChanged)="emitTicksHeight($event)"
       />
-      <svg:g ngx-charts-axis-label
+      <svg:g
+        ngx-charts-axis-label
         *ngIf="showLabel"
         [label]="labelText"
         [offset]="labelOffset"
         [orient]="'bottom'"
         [height]="dims.height"
-        [width]="dims.width">
-      </svg:g>
+        [width]="dims.width"
+      ></svg:g>
     </svg:g>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class XAxisComponent implements OnChanges {
-
   @Input() xScale;
   @Input() dims;
+  @Input() trimTicks: boolean;
+  @Input() rotateTicks: boolean = true;
+  @Input() maxTickLength: number;
   @Input() tickFormatting;
   @Input() showGridLines = false;
   @Input() showLabel;
@@ -58,9 +62,9 @@ export class XAxisComponent implements OnChanges {
   @Input() xAxisTickInterval;
   @Input() xAxisTickCount: any;
   @Input() xOrient: string = 'bottom';
+  @Input() xAxisOffset: number = 0;
   @Input() fontFamily: string = 'initial';
   @Input() fontSize: number = 12;
-  @Input() maxLabelLength: number;
   @Input() labelRotationAngle: number;
 
   @Output() dimensionsChanged = new EventEmitter();
@@ -74,7 +78,7 @@ export class XAxisComponent implements OnChanges {
   stroke: string = 'stroke';
   tickStroke: string = '#ccc';
   strokeWidth: string = 'none';
-  xAxisOffset: number = 5;
+  padding: number = 5;
 
   @ViewChild(XAxisTicksComponent) ticksComponent: XAxisTicksComponent;
 
@@ -83,7 +87,7 @@ export class XAxisComponent implements OnChanges {
   }
 
   update(): void {
-    this.transform = `translate(0,${this.xAxisOffset + this.dims.height})`;
+    this.transform = `translate(0,${this.xAxisOffset + this.padding + this.dims.height})`;
 
     if (typeof this.xAxisTickCount !== 'undefined') {
       this.tickArguments = [this.xAxisTickCount];
@@ -95,9 +99,8 @@ export class XAxisComponent implements OnChanges {
     if (newLabelOffset !== this.labelOffset) {
       this.labelOffset = newLabelOffset;
       setTimeout(() => {
-        this.dimensionsChanged.emit({height});
+        this.dimensionsChanged.emit({ height });
       }, 0);
     }
   }
-
 }

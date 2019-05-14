@@ -8,12 +8,7 @@ import {
   ContentChild,
   TemplateRef
 } from '@angular/core';
-import {
-  trigger,
-  style,
-  animate,
-  transition
-} from '@angular/animations';
+import { trigger, style, animate, transition } from '@angular/animations';
 import { scaleBand, scaleLinear } from 'd3-scale';
 
 import { calculateViewDimensions, ViewDimensions } from '../common/view-dimensions.helper';
@@ -31,44 +26,54 @@ import { BaseChartComponent } from '../common/base-chart.component';
       [animations]="animations"
       (legendLabelActivate)="onActivate($event)"
       (legendLabelDeactivate)="onDeactivate($event)"
-      (legendLabelClick)="onClick($event)">
+      (legendLabelClick)="onClick($event)"
+    >
       <svg:g [attr.transform]="transform" class="bar-chart chart">
-        <svg:g ngx-charts-grid-panel-series
+        <svg:g
+          ngx-charts-grid-panel-series
           [xScale]="groupScale"
           [yScale]="valueScale"
           [data]="results"
           [dims]="dims"
-          orient="vertical">
-        </svg:g>
-        <svg:g ngx-charts-x-axis
+          orient="vertical"
+        ></svg:g>
+        <svg:g
+          ngx-charts-x-axis
           *ngIf="xAxis"
           [xScale]="groupScale"
           [dims]="dims"
           [showLabel]="showXAxisLabel"
           [labelText]="xAxisLabel"
+          [trimTicks]="trimXAxisTicks"
+          [rotateTicks]="rotateXAxisTicks"
+          [maxTickLength]="maxXAxisTickLength"
           [tickFormatting]="xAxisTickFormatting"
           [ticks]="xAxisTicks"
+          [xAxisOffset]="dataLabelMaxHeight.negative"
           [fontFamily]="xAxisFontFamily"
           [fontSize]="xAxisFontSize"
           [labelRotationAngle]="xAxisLabelRotationAngle"
-          [maxLabelLength]="xAxisMaxLabelLength"
-          (dimensionsChanged)="updateXAxisHeight($event)">
-        </svg:g>
-        <svg:g ngx-charts-y-axis
+          (dimensionsChanged)="updateXAxisHeight($event)"
+        ></svg:g>
+        <svg:g
+          ngx-charts-y-axis
           *ngIf="yAxis"
           [yScale]="valueScale"
           [dims]="dims"
           [showGridLines]="showGridLines"
           [showLabel]="showYAxisLabel"
           [labelText]="yAxisLabel"
+          [trimTicks]="trimYAxisTicks"
+          [maxTickLength]="maxYAxisTickLength"
           [tickFormatting]="yAxisTickFormatting"
           [ticks]="yAxisTicks"
           [fontFamily]="yAxisFontFamily"
           [fontSize]="yAxisFontSize"
-          (dimensionsChanged)="updateYAxisWidth($event)">
-        </svg:g>
-        <svg:g ngx-charts-series-vertical
-          *ngFor="let group of results; trackBy:trackBy"
+          (dimensionsChanged)="updateYAxisWidth($event)"
+        ></svg:g>
+        <svg:g
+          ngx-charts-series-vertical
+          *ngFor="let group of results; let index = index; trackBy: trackBy"
           [@animationState]="'active'"
           [attr.transform]="groupTransform(group)"
           [activeEntries]="activeEntries"
@@ -82,14 +87,17 @@ import { BaseChartComponent } from '../common/base-chart.component';
           [tooltipTemplate]="tooltipTemplate"
           [tooltipFontFamily]="fontFamily"
           [tooltipFontSize]="fontSize"
+          [showDataLabel]="showDataLabel"
+          [dataLabelFormatting]="dataLabelFormatting"
           [seriesName]="group.name"
           [roundEdges]="roundEdges"
           [animations]="animations"
           (select)="onClick($event, group)"
           (activate)="onActivate($event, group)"
           (deactivate)="onDeactivate($event, group)"
+          (dataLabelHeightChanged)="onDataLabelMaxHeightChanged($event, index)"
         />
-        </svg:g>
+      </svg:g>
     </ngx-charts-chart>
   `,
   styleUrls: ['../common/base-chart.component.scss'],
@@ -100,17 +108,17 @@ import { BaseChartComponent } from '../common/base-chart.component';
       transition(':leave', [
         style({
           opacity: 1,
-          transform: '*',
+          transform: '*'
         }),
-        animate(500, style({opacity: 0, transform: 'scale(0)'}))
+        animate(500, style({ opacity: 0, transform: 'scale(0)' }))
       ])
     ])
   ]
 })
 export class BarVertical2DComponent extends BaseChartComponent {
-
   @Input() legend = false;
   @Input() legendTitle: string = 'Legend';
+  @Input() legendPosition: string = 'right';
   @Input() xAxis;
   @Input() yAxis;
   @Input() showXAxisLabel;
@@ -123,6 +131,11 @@ export class BarVertical2DComponent extends BaseChartComponent {
   @Input() showGridLines: boolean = true;
   @Input() activeEntries: any[] = [];
   @Input() schemeType: string;
+  @Input() trimXAxisTicks: boolean = true;
+  @Input() trimYAxisTicks: boolean = true;
+  @Input() rotateXAxisTicks: boolean = true;
+  @Input() maxXAxisTickLength: number = 16;
+  @Input() maxYAxisTickLength: number = 16;
   @Input() xAxisTickFormatting: any;
   @Input() yAxisTickFormatting: any;
   @Input() xAxisTicks: any[];
@@ -132,11 +145,12 @@ export class BarVertical2DComponent extends BaseChartComponent {
   @Input() roundDomains: boolean = false;
   @Input() roundEdges: boolean = true;
   @Input() yScaleMax: number;
+  @Input() showDataLabel: boolean = false;
+  @Input() dataLabelFormatting: any;
   @Input() fontSize: number;
   @Input() fontFamily: string;
   @Input() xAxisFontFamily: string;
   @Input() xAxisFontSize: number;
-  @Input() xAxisMaxLabelLength: number;
   @Input() xAxisLabelRotationAngle: number;
   @Input() yAxisFontFamily: string;
   @Input() yAxisFontSize: number;
@@ -159,9 +173,15 @@ export class BarVertical2DComponent extends BaseChartComponent {
   xAxisHeight: number = 0;
   yAxisWidth: number = 0;
   legendOptions: any;
+  dataLabelMaxHeight: any = { negative: 0, positive: 0 };
 
   update(): void {
     super.update();
+
+    if (!this.showDataLabel) {
+      this.dataLabelMaxHeight = { negative: 0, positive: 0 };
+    }
+    this.margin = [10 + this.dataLabelMaxHeight.positive, 20, 10 + this.dataLabelMaxHeight.negative, 20];
 
     this.dims = calculateViewDimensions({
       width: this.width,
@@ -174,8 +194,13 @@ export class BarVertical2DComponent extends BaseChartComponent {
       showXLabel: this.showXAxisLabel,
       showYLabel: this.showYAxisLabel,
       showLegend: this.legend,
-      legendType: this.schemeType
+      legendType: this.schemeType,
+      legendPosition: this.legendPosition
     });
+
+    if (this.showDataLabel) {
+      this.dims.height -= this.dataLabelMaxHeight.negative;
+    }
 
     this.formatDates();
 
@@ -190,7 +215,18 @@ export class BarVertical2DComponent extends BaseChartComponent {
     this.setColors();
     this.legendOptions = this.getLegendOptions();
 
-    this.transform = `translate(${ this.dims.xOffset } , ${ this.margin[0] })`;
+    this.transform = `translate(${this.dims.xOffset} , ${this.margin[0] + this.dataLabelMaxHeight.negative})`;
+  }
+
+  onDataLabelMaxHeightChanged(event, groupIndex) {
+    if (event.size.negative) {
+      this.dataLabelMaxHeight.negative = Math.max(this.dataLabelMaxHeight.negative, event.size.height);
+    } else {
+      this.dataLabelMaxHeight.positive = Math.max(this.dataLabelMaxHeight.positive, event.size.height);
+    }
+    if (groupIndex === this.results.length - 1) {
+      setTimeout(() => this.update());
+    }
   }
 
   getGroupScale(): any {
@@ -254,9 +290,7 @@ export class BarVertical2DComponent extends BaseChartComponent {
     }
 
     const min = Math.min(0, ...domain);
-    const max = this.yScaleMax
-      ? Math.max(this.yScaleMax, ...domain)
-      : Math.max(...domain);
+    const max = this.yScaleMax ? Math.max(this.yScaleMax, ...domain) : Math.max(0, ...domain);
 
     return [min, max];
   }
@@ -294,6 +328,7 @@ export class BarVertical2DComponent extends BaseChartComponent {
       colors: undefined,
       domain: [],
       title: undefined,
+      position: this.legendPosition,
       fontSize: this.fontSize,
       fontFamily: this.fontFamily
     };
@@ -309,12 +344,12 @@ export class BarVertical2DComponent extends BaseChartComponent {
     return opts;
   }
 
-  updateYAxisWidth({width}) {
+  updateYAxisWidth({ width }) {
     this.yAxisWidth = width;
     this.update();
   }
 
-  updateXAxisHeight({height}) {
+  updateXAxisHeight({ height }) {
     this.xAxisHeight = height;
     this.update();
   }
@@ -332,7 +367,7 @@ export class BarVertical2DComponent extends BaseChartComponent {
       return;
     }
 
-    this.activeEntries = [ item, ...this.activeEntries ];
+    this.activeEntries = [item, ...this.activeEntries];
     this.activate.emit({ value: item, entries: this.activeEntries });
   }
 
@@ -351,5 +386,4 @@ export class BarVertical2DComponent extends BaseChartComponent {
 
     this.deactivate.emit({ value: item, entries: this.activeEntries });
   }
-
 }

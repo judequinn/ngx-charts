@@ -1,14 +1,14 @@
 import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  OnChanges,
-  ElementRef,
-  ViewChild,
-  SimpleChanges,
   AfterViewInit,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import { trimLabel } from '../trim-label.helper';
 import { reduceTicks } from './ticks.helper';
@@ -17,47 +17,43 @@ import { reduceTicks } from './ticks.helper';
   selector: 'g[ngx-charts-x-axis-ticks]',
   template: `
     <svg:g #ticksel>
-      <svg:g *ngFor="let tick of ticks" class="tick"
-        [attr.transform]="tickTransform(tick)">
-        <title>{{tickFormat(tick)}}</title>
+      <svg:g *ngFor="let tick of ticks" class="tick" [attr.transform]="tickTransform(tick)">
+        <title>{{ tickFormat(tick) }}</title>
         <svg:text
           stroke-width="0.01"
           [attr.text-anchor]="textAnchor"
           [attr.transform]="textTransform"
           [style.font-size]="fontSize + 'px'"
-          [style.font-family]="fontFamily">
-          {{trimLabel(tickFormat(tick), maxLabelLength)}}
+          [style.font-family]="fontFamily"
+        >
+          {{ tickTrim(tickFormat(tick)) }}
         </svg:text>
       </svg:g>
     </svg:g>
 
-    <svg:g *ngFor="let tick of ticks"
-      [attr.transform]="tickTransform(tick)">
-      <svg:g *ngIf="showGridLines"
-        [attr.transform]="gridLineTransform()">
-        <svg:line
-          class="gridline-path gridline-path-vertical"
-          [attr.y1]="-gridLineHeight"
-          y2="0" />
+    <svg:g *ngFor="let tick of ticks" [attr.transform]="tickTransform(tick)">
+      <svg:g *ngIf="showGridLines" [attr.transform]="gridLineTransform()">
+        <svg:line class="gridline-path gridline-path-vertical" [attr.y1]="-gridLineHeight" y2="0" />
       </svg:g>
     </svg:g>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class XAxisTicksComponent implements OnChanges, AfterViewInit {
-
   @Input() scale;
   @Input() orient;
   @Input() tickArguments = [5];
   @Input() tickValues: any[];
   @Input() tickStroke = '#ccc';
+  @Input() trimTicks: boolean = true;
+  @Input() maxTickLength: number = 16;
   @Input() tickFormatting;
   @Input() showGridLines = false;
   @Input() gridLineHeight;
   @Input() width;
+  @Input() rotateTicks: boolean = true;
   @Input() fontFamily: string = 'initial';
   @Input() fontSize: number = 12;
-  @Input() maxLabelLength: number;
   @Input() labelRotationAngle: number;
 
   @Output() dimensionsChanged = new EventEmitter();
@@ -70,7 +66,6 @@ export class XAxisTicksComponent implements OnChanges, AfterViewInit {
   textAnchor: string = 'middle';
   maxTicksLength: number = 0;
   maxAllowedLength: number = 16;
-  trimLabel: (o: any) => any;
   adjustedScale: any;
   textTransform: any;
   ticks: any;
@@ -78,10 +73,6 @@ export class XAxisTicksComponent implements OnChanges, AfterViewInit {
   height: number = 0;
 
   @ViewChild('ticksel') ticksElement: ElementRef;
-
-  constructor() {
-    this.trimLabel = trimLabel;
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.update();
@@ -119,9 +110,11 @@ export class XAxisTicksComponent implements OnChanges, AfterViewInit {
 
     const angle = this.labelRotationAngle != null ? this.labelRotationAngle : this.getRotationAngle(this.ticks);
 
-    this.adjustedScale = this.scale.bandwidth ? function(d) {
-      return this.scale(d) + this.scale.bandwidth() * 0.5;
-    } : this.scale;
+    this.adjustedScale = this.scale.bandwidth
+      ? function(d) {
+          return this.scale(d) + this.scale.bandwidth() * 0.5;
+        }
+      : this.scale;
 
     this.textTransform = '';
     if (angle === 0) {
@@ -145,10 +138,16 @@ export class XAxisTicksComponent implements OnChanges, AfterViewInit {
 
   getRotationAngle(ticks): number {
     let angle = 0;
+    this.maxTicksLength = 0;
     for (let i = 0; i < ticks.length; i++) {
-      const tick = ticks[i].toString();
-      if (tick.length > this.maxTicksLength) {
-        this.maxTicksLength = tick.length;
+      const tick = this.tickFormat(ticks[i]).toString();
+      let tickLength = tick.length;
+      if (this.trimTicks) {
+        tickLength = this.tickTrim(tick).length;
+      }
+
+      if (tickLength > this.maxTicksLength) {
+        this.maxTicksLength = tickLength;
       }
     }
 
@@ -160,7 +159,7 @@ export class XAxisTicksComponent implements OnChanges, AfterViewInit {
     const maxBaseWidth = Math.floor(this.width / ticks.length);
 
     // calculate optimal angle
-    while(baseWidth > maxBaseWidth && angle > -90) {
+    while (baseWidth > maxBaseWidth && angle > -90) {
       angle -= 30;
       baseWidth = Math.cos(angle * (Math.PI / 180)) * wordWidth;
     }
@@ -197,4 +196,7 @@ export class XAxisTicksComponent implements OnChanges, AfterViewInit {
     return `translate(0,${-this.verticalSpacing - 5})`;
   }
 
+  tickTrim(label: string): string {
+    return this.trimTicks ? trimLabel(label, this.maxTickLength) : label;
+  }
 }

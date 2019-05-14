@@ -5,6 +5,7 @@ import { BaseChartComponent } from '../common/base-chart.component';
 export declare class BarVerticalComponent extends BaseChartComponent {
     legend: boolean;
     legendTitle: string;
+    legendPosition: string;
     xAxis: any;
     yAxis: any;
     showXAxisLabel: any;
@@ -16,6 +17,11 @@ export declare class BarVerticalComponent extends BaseChartComponent {
     showGridLines: boolean;
     activeEntries: any[];
     schemeType: string;
+    trimXAxisTicks: boolean;
+    trimYAxisTicks: boolean;
+    rotateXAxisTicks: boolean;
+    maxXAxisTickLength: number;
+    maxYAxisTickLength: number;
     xAxisTickFormatting: any;
     yAxisTickFormatting: any;
     xAxisTicks: any[];
@@ -25,6 +31,7 @@ export declare class BarVerticalComponent extends BaseChartComponent {
     roundEdges: boolean;
     yScaleMax: number;
     yScaleMin: number;
+<<<<<<< HEAD
     fontSize: number;
     fontFamily: string;
     xAxisFontFamily: string;
@@ -33,6 +40,10 @@ export declare class BarVerticalComponent extends BaseChartComponent {
     xAxisLabelRotationAngle: number;
     yAxisFontFamily: string;
     yAxisFontSize: number;
+=======
+    showDataLabel: boolean;
+    dataLabelFormatting: any;
+>>>>>>> upstream/master
     activate: EventEmitter<any>;
     deactivate: EventEmitter<any>;
     tooltipTemplate: TemplateRef<any>;
@@ -47,6 +58,7 @@ export declare class BarVerticalComponent extends BaseChartComponent {
     xAxisHeight: number;
     yAxisWidth: number;
     legendOptions: any;
+    dataLabelMaxHeight: any;
     update(): void;
     getXScale(): any;
     getYScale(): any;
@@ -59,15 +71,20 @@ export declare class BarVerticalComponent extends BaseChartComponent {
         colors: any;
         domain: any[];
         title: any;
+<<<<<<< HEAD
         fontSize: number;
         fontFamily: string;
+=======
+        position: string;
+>>>>>>> upstream/master
     };
-    updateYAxisWidth({width}: {
+    updateYAxisWidth({ width }: {
         width: any;
     }): void;
-    updateXAxisHeight({height}: {
+    updateXAxisHeight({ height }: {
         height: any;
     }): void;
+    onDataLabelMaxHeightChanged(event: any): void;
     onActivate(item: any): void;
     onDeactivate(item: any): void;
 }

@@ -48,6 +48,9 @@ import { BaseChartComponent } from '../common/base-chart.component';
           [showGridLines]="showGridLines"
           [showLabel]="showXAxisLabel"
           [labelText]="xAxisLabel"
+          [trimTicks]="trimXAxisTicks"
+          [rotateTicks]="rotateXAxisTicks"
+          [maxTickLength]="maxXAxisTickLength"
           [tickFormatting]="xAxisTickFormatting"
           [ticks]="xAxisTicks"
           (dimensionsChanged)="updateXAxisHeight($event)">
@@ -58,12 +61,15 @@ import { BaseChartComponent } from '../common/base-chart.component';
           [dims]="dims"
           [showLabel]="showYAxisLabel"
           [labelText]="yAxisLabel"
+          [trimTicks]="trimYAxisTicks"
+          [maxTickLength]="maxYAxisTickLength"
           [tickFormatting]="yAxisTickFormatting"
           [ticks]="yAxisTicks"
+          [yAxisOffset]="dataLabelMaxWidth.negative"
           (dimensionsChanged)="updateYAxisWidth($event)">
         </svg:g>
         <svg:g
-          *ngFor="let group of results; trackBy:trackBy"
+          *ngFor="let group of results; let index = index; trackBy:trackBy"
           [@animationState]="'active'"
           [attr.transform]="groupTransform(group)">
           <svg:g ngx-charts-series-horizontal
@@ -79,9 +85,12 @@ import { BaseChartComponent } from '../common/base-chart.component';
             [seriesName]="group.name"
             [roundEdges]="roundEdges"
             [animations]="animations"
+            [showDataLabel]="showDataLabel"
+            [dataLabelFormatting]="dataLabelFormatting"
             (select)="onClick($event, group)"
             (activate)="onActivate($event, group)"
             (deactivate)="onDeactivate($event, group)"
+            (dataLabelWidthChanged)="onDataLabelMaxWidthChanged($event, index)"
           />
         </svg:g>
       </svg:g>
@@ -106,6 +115,7 @@ export class BarHorizontal2DComponent extends BaseChartComponent {
 
   @Input() legend = false;
   @Input() legendTitle: string = 'Legend';
+  @Input() legendPosition: string = 'right';
   @Input() xAxis;
   @Input() yAxis;
   @Input() showXAxisLabel;
@@ -117,6 +127,11 @@ export class BarHorizontal2DComponent extends BaseChartComponent {
   @Input() showGridLines: boolean = true;
   @Input() activeEntries: any[] = [];
   @Input() schemeType: string;
+  @Input() trimXAxisTicks: boolean = true;
+  @Input() trimYAxisTicks: boolean = true;
+  @Input() rotateXAxisTicks: boolean = true;
+  @Input() maxXAxisTickLength: number = 16;
+  @Input() maxYAxisTickLength: number = 16;
   @Input() xAxisTickFormatting: any;
   @Input() yAxisTickFormatting: any;
   @Input() xAxisTicks: any[];
@@ -126,7 +141,9 @@ export class BarHorizontal2DComponent extends BaseChartComponent {
   @Input() roundDomains: boolean = false;
   @Input() roundEdges: boolean = true;
   @Input() xScaleMax: number;
-
+  @Input() showDataLabel: boolean = false;
+  @Input() dataLabelFormatting: any;
+ 
   @Output() activate: EventEmitter<any> = new EventEmitter();
   @Output() deactivate: EventEmitter<any> = new EventEmitter();
 
@@ -145,9 +162,16 @@ export class BarHorizontal2DComponent extends BaseChartComponent {
   xAxisHeight: number = 0;
   yAxisWidth: number = 0;
   legendOptions: any;
+  dataLabelMaxWidth: any = {negative: 0, positive: 0};
 
   update(): void {
     super.update();
+
+    if (!this.showDataLabel) {
+      this.dataLabelMaxWidth = {negative: 0, positive: 0};          
+    }
+
+    this.margin = [10, 20 + this.dataLabelMaxWidth.positive, 10, 20 + this.dataLabelMaxWidth.negative]; 
 
     this.dims = calculateViewDimensions({
       width: this.width,
@@ -160,7 +184,8 @@ export class BarHorizontal2DComponent extends BaseChartComponent {
       showXLabel: this.showXAxisLabel,
       showYLabel: this.showYAxisLabel,
       showLegend: this.legend,
-      legendType: this.schemeType
+      legendType: this.schemeType,
+      legendPosition: this.legendPosition
     });
 
     this.formatDates();
@@ -247,7 +272,7 @@ export class BarHorizontal2DComponent extends BaseChartComponent {
     const min = Math.min(0, ...domain);
     const max = this.xScaleMax
       ? Math.max(this.xScaleMax, ...domain)
-      : Math.max(...domain);
+      : Math.max(0, ...domain);
     return [min, max];
   }
 
@@ -283,7 +308,8 @@ export class BarHorizontal2DComponent extends BaseChartComponent {
       scaleType: this.schemeType,
       colors: undefined,
       domain: [],
-      title: undefined
+      title: undefined,
+      position: this.legendPosition
     };
     if (opts.scaleType === 'ordinal') {
       opts.domain = this.innerDomain;
@@ -307,6 +333,16 @@ export class BarHorizontal2DComponent extends BaseChartComponent {
     this.update();
   }
 
+  onDataLabelMaxWidthChanged(event, groupIndex) {         
+    if (event.size.negative)  {
+      this.dataLabelMaxWidth.negative = Math.max(this.dataLabelMaxWidth.negative, event.size.width);
+    } else {
+      this.dataLabelMaxWidth.positive = Math.max(this.dataLabelMaxWidth.positive, event.size.width);
+    }  
+    if (groupIndex === (this.results.length - 1)) {      
+      setTimeout(() => this.update());
+    }        
+  } 
   onActivate(event, group?) {
     const item = Object.assign({}, event);
     if (group) {

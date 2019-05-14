@@ -5,6 +5,7 @@ import { BaseChartComponent } from '../common/base-chart.component';
 export declare class BarVertical2DComponent extends BaseChartComponent {
     legend: boolean;
     legendTitle: string;
+    legendPosition: string;
     xAxis: any;
     yAxis: any;
     showXAxisLabel: any;
@@ -17,6 +18,11 @@ export declare class BarVertical2DComponent extends BaseChartComponent {
     showGridLines: boolean;
     activeEntries: any[];
     schemeType: string;
+    trimXAxisTicks: boolean;
+    trimYAxisTicks: boolean;
+    rotateXAxisTicks: boolean;
+    maxXAxisTickLength: number;
+    maxYAxisTickLength: number;
     xAxisTickFormatting: any;
     yAxisTickFormatting: any;
     xAxisTicks: any[];
@@ -26,6 +32,7 @@ export declare class BarVertical2DComponent extends BaseChartComponent {
     roundDomains: boolean;
     roundEdges: boolean;
     yScaleMax: number;
+<<<<<<< HEAD
     fontSize: number;
     fontFamily: string;
     xAxisFontFamily: string;
@@ -34,6 +41,10 @@ export declare class BarVertical2DComponent extends BaseChartComponent {
     xAxisLabelRotationAngle: number;
     yAxisFontFamily: string;
     yAxisFontSize: number;
+=======
+    showDataLabel: boolean;
+    dataLabelFormatting: any;
+>>>>>>> upstream/master
     activate: EventEmitter<any>;
     deactivate: EventEmitter<any>;
     tooltipTemplate: TemplateRef<any>;
@@ -50,7 +61,9 @@ export declare class BarVertical2DComponent extends BaseChartComponent {
     xAxisHeight: number;
     yAxisWidth: number;
     legendOptions: any;
+    dataLabelMaxHeight: any;
     update(): void;
+    onDataLabelMaxHeightChanged(event: any, groupIndex: any): void;
     getGroupScale(): any;
     getInnerScale(): any;
     getValueScale(): any;
@@ -66,13 +79,17 @@ export declare class BarVertical2DComponent extends BaseChartComponent {
         colors: any;
         domain: any[];
         title: any;
+<<<<<<< HEAD
         fontSize: number;
         fontFamily: string;
+=======
+        position: string;
+>>>>>>> upstream/master
     };
-    updateYAxisWidth({width}: {
+    updateYAxisWidth({ width }: {
         width: any;
     }): void;
-    updateXAxisHeight({height}: {
+    updateXAxisHeight({ height }: {
         height: any;
     }): void;
     onActivate(event: any, group?: any): void;

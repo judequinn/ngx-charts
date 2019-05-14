@@ -7,11 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, Input, Output, EventEmitter, ViewChild, Renderer, ChangeDetectionStrategy, TemplateRef, } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, ChangeDetectionStrategy, TemplateRef, } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
+import { createMouseEvent } from '../events';
 var TooltipArea = /** @class */ (function () {
-    function TooltipArea(renderer) {
-        this.renderer = renderer;
+    function TooltipArea() {
         this.anchorOpacity = 0;
         this.anchorPos = -1;
         this.anchorValues = [];
@@ -45,7 +45,7 @@ var TooltipArea = /** @class */ (function () {
                 else {
                     color = this.colors.getColor(group.name);
                 }
-                results.push({
+                var data = Object.assign({}, item, {
                     value: val,
                     name: label,
                     series: groupName,
@@ -53,6 +53,7 @@ var TooltipArea = /** @class */ (function () {
                     max: item.max,
                     color: color
                 });
+                results.push(data);
             }
         }
         return results;
@@ -66,8 +67,8 @@ var TooltipArea = /** @class */ (function () {
         this.anchorPos = Math.min(this.dims.width, this.anchorPos);
         this.anchorValues = this.getValues(closestPoint);
         if (this.anchorPos !== this.lastAnchorPos) {
-            var ev = new MouseEvent('mouseleave', { bubbles: false });
-            this.renderer.invokeElementMethod(this.tooltipAnchor.nativeElement, 'dispatchEvent', [ev]);
+            var ev = createMouseEvent('mouseleave');
+            this.tooltipAnchor.nativeElement.dispatchEvent(ev);
             this.anchorOpacity = 0.7;
             this.hover.emit({
                 value: closestPoint
@@ -104,12 +105,12 @@ var TooltipArea = /** @class */ (function () {
         return closestIndex;
     };
     TooltipArea.prototype.showTooltip = function () {
-        var event = new MouseEvent('mouseenter', { bubbles: false });
-        this.renderer.invokeElementMethod(this.tooltipAnchor.nativeElement, 'dispatchEvent', [event]);
+        var event = createMouseEvent('mouseenter');
+        this.tooltipAnchor.nativeElement.dispatchEvent(event);
     };
     TooltipArea.prototype.hideTooltip = function () {
-        var event = new MouseEvent('mouseleave', { bubbles: false });
-        this.renderer.invokeElementMethod(this.tooltipAnchor.nativeElement, 'dispatchEvent', [event]);
+        var event = createMouseEvent('mouseleave');
+        this.tooltipAnchor.nativeElement.dispatchEvent(event);
         this.anchorOpacity = 0;
         this.lastAnchorPos = -1;
     };
@@ -219,8 +220,7 @@ var TooltipArea = /** @class */ (function () {
                     ])
                 ])
             ]
-        }),
-        __metadata("design:paramtypes", [Renderer])
+        })
     ], TooltipArea);
     return TooltipArea;
 }());

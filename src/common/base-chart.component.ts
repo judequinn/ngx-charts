@@ -3,8 +3,8 @@ import {
   Output, EventEmitter, AfterViewInit, OnDestroy, OnChanges, SimpleChanges
 } from '@angular/core';
 
-import { fromEvent as observableFromEvent } from 'rxjs/observable/fromEvent';
-import { debounceTime } from 'rxjs/operators/debounceTime';
+import { fromEvent as observableFromEvent } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 import { VisibilityObserver } from '../utils';
 
@@ -81,8 +81,8 @@ export class BaseChartComponent implements OnChanges, AfterViewInit, OnDestroy {
       this.height = 400;
     }
 
-    this.width = ~~this.width;
-    this.height = ~~this.height;
+    this.width = Math.floor(this.width);
+    this.height = Math.floor(this.height);
 
     if (this.cd) {
       this.cd.markForCheck();
@@ -138,7 +138,7 @@ export class BaseChartComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
 
   private bindWindowResizeEvent(): void {
-    const source = observableFromEvent(window, 'resize', null, null);
+    const source = observableFromEvent(window, 'resize');
     const subscription = source.pipe(debounceTime(200)).subscribe(e => {
       this.update();
       if (this.cd) {
