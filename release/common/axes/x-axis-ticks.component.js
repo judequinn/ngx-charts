@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { trimLabel } from '../trim-label.helper';
 import { reduceTicks } from './ticks.helper';
 var XAxisTicksComponent = /** @class */ (function () {
@@ -17,16 +17,9 @@ var XAxisTicksComponent = /** @class */ (function () {
         this.trimTicks = true;
         this.maxTickLength = 16;
         this.showGridLines = false;
-<<<<<<< HEAD
-<<<<<<< HEAD
+        this.rotateTicks = true;
         this.fontFamily = 'initial';
         this.fontSize = 12;
-=======
-        this.rotateTicks = true;
->>>>>>> upstream/master
-=======
-        this.rotateTicks = true;
->>>>>>> upstream/master
         this.dimensionsChanged = new EventEmitter();
         this.verticalSpacing = 20;
         this.rotateLabels = false;
@@ -72,12 +65,12 @@ var XAxisTicksComponent = /** @class */ (function () {
                 return d.toLocaleString();
             };
         }
-<<<<<<< HEAD
-<<<<<<< HEAD
         var angle = this.labelRotationAngle != null ? this.labelRotationAngle : this.getRotationAngle(this.ticks);
-        this.adjustedScale = this.scale.bandwidth ? function (d) {
-            return this.scale(d) + this.scale.bandwidth() * 0.5;
-        } : this.scale;
+        this.adjustedScale = this.scale.bandwidth
+            ? function (d) {
+                return this.scale(d) + this.scale.bandwidth() * 0.5;
+            }
+            : this.scale;
         this.textTransform = '';
         if (angle === 0) {
             this.textAnchor = 'middle';
@@ -88,26 +81,6 @@ var XAxisTicksComponent = /** @class */ (function () {
             this.verticalSpacing = 40;
         }
         else if (angle < 0) {
-=======
-        var angle = this.rotateTicks ? this.getRotationAngle(this.ticks) : null;
-        this.adjustedScale = this.scale.bandwidth
-            ? function (d) {
-                return this.scale(d) + this.scale.bandwidth() * 0.5;
-            }
-            : this.scale;
-        this.textTransform = '';
-        if (angle && angle !== 0) {
->>>>>>> upstream/master
-=======
-        var angle = this.rotateTicks ? this.getRotationAngle(this.ticks) : null;
-        this.adjustedScale = this.scale.bandwidth
-            ? function (d) {
-                return this.scale(d) + this.scale.bandwidth() * 0.5;
-            }
-            : this.scale;
-        this.textTransform = '';
-        if (angle && angle !== 0) {
->>>>>>> upstream/master
             this.textTransform = "rotate(" + angle + ")";
             this.textAnchor = 'end';
             this.verticalSpacing = 10;
@@ -218,8 +191,10 @@ var XAxisTicksComponent = /** @class */ (function () {
     ], XAxisTicksComponent.prototype, "width", void 0);
     __decorate([
         Input(),
-<<<<<<< HEAD
-<<<<<<< HEAD
+        __metadata("design:type", Boolean)
+    ], XAxisTicksComponent.prototype, "rotateTicks", void 0);
+    __decorate([
+        Input(),
         __metadata("design:type", String)
     ], XAxisTicksComponent.prototype, "fontFamily", void 0);
     __decorate([
@@ -229,19 +204,7 @@ var XAxisTicksComponent = /** @class */ (function () {
     __decorate([
         Input(),
         __metadata("design:type", Number)
-    ], XAxisTicksComponent.prototype, "maxLabelLength", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Number)
     ], XAxisTicksComponent.prototype, "labelRotationAngle", void 0);
-=======
-        __metadata("design:type", Boolean)
-    ], XAxisTicksComponent.prototype, "rotateTicks", void 0);
->>>>>>> upstream/master
-=======
-        __metadata("design:type", Boolean)
-    ], XAxisTicksComponent.prototype, "rotateTicks", void 0);
->>>>>>> upstream/master
     __decorate([
         Output(),
         __metadata("design:type", Object)
@@ -253,15 +216,7 @@ var XAxisTicksComponent = /** @class */ (function () {
     XAxisTicksComponent = __decorate([
         Component({
             selector: 'g[ngx-charts-x-axis-ticks]',
-<<<<<<< HEAD
-<<<<<<< HEAD
-            template: "\n    <svg:g #ticksel>\n      <svg:g *ngFor=\"let tick of ticks\" class=\"tick\"\n        [attr.transform]=\"tickTransform(tick)\">\n        <title>{{tickFormat(tick)}}</title>\n        <svg:text\n          stroke-width=\"0.01\"\n          [attr.text-anchor]=\"textAnchor\"\n          [attr.transform]=\"textTransform\"\n          [style.font-size]=\"fontSize + 'px'\"\n          [style.font-family]=\"fontFamily\">\n          {{trimLabel(tickFormat(tick), maxLabelLength)}}\n        </svg:text>\n      </svg:g>\n    </svg:g>\n\n    <svg:g *ngFor=\"let tick of ticks\"\n      [attr.transform]=\"tickTransform(tick)\">\n      <svg:g *ngIf=\"showGridLines\"\n        [attr.transform]=\"gridLineTransform()\">\n        <svg:line\n          class=\"gridline-path gridline-path-vertical\"\n          [attr.y1]=\"-gridLineHeight\"\n          y2=\"0\" />\n      </svg:g>\n    </svg:g>\n  ",
-=======
-            template: "\n    <svg:g #ticksel>\n      <svg:g *ngFor=\"let tick of ticks\" class=\"tick\"\n        [attr.transform]=\"tickTransform(tick)\">\n        <title>{{tickFormat(tick)}}</title>\n        <svg:text\n          stroke-width=\"0.01\"\n          [attr.text-anchor]=\"textAnchor\"\n          [attr.transform]=\"textTransform\"\n          [style.font-size]=\"'12px'\">\n          {{tickTrim(tickFormat(tick))}}\n        </svg:text>\n      </svg:g>\n    </svg:g>\n\n    <svg:g *ngFor=\"let tick of ticks\"\n      [attr.transform]=\"tickTransform(tick)\">\n      <svg:g *ngIf=\"showGridLines\"\n        [attr.transform]=\"gridLineTransform()\">\n        <svg:line\n          class=\"gridline-path gridline-path-vertical\"\n          [attr.y1]=\"-gridLineHeight\"\n          y2=\"0\" />\n      </svg:g>\n    </svg:g>\n  ",
->>>>>>> upstream/master
-=======
-            template: "\n    <svg:g #ticksel>\n      <svg:g *ngFor=\"let tick of ticks\" class=\"tick\"\n        [attr.transform]=\"tickTransform(tick)\">\n        <title>{{tickFormat(tick)}}</title>\n        <svg:text\n          stroke-width=\"0.01\"\n          [attr.text-anchor]=\"textAnchor\"\n          [attr.transform]=\"textTransform\"\n          [style.font-size]=\"'12px'\">\n          {{tickTrim(tickFormat(tick))}}\n        </svg:text>\n      </svg:g>\n    </svg:g>\n\n    <svg:g *ngFor=\"let tick of ticks\"\n      [attr.transform]=\"tickTransform(tick)\">\n      <svg:g *ngIf=\"showGridLines\"\n        [attr.transform]=\"gridLineTransform()\">\n        <svg:line\n          class=\"gridline-path gridline-path-vertical\"\n          [attr.y1]=\"-gridLineHeight\"\n          y2=\"0\" />\n      </svg:g>\n    </svg:g>\n  ",
->>>>>>> upstream/master
+            template: "\n    <svg:g #ticksel>\n      <svg:g *ngFor=\"let tick of ticks\" class=\"tick\" [attr.transform]=\"tickTransform(tick)\">\n        <title>{{ tickFormat(tick) }}</title>\n        <svg:text\n          stroke-width=\"0.01\"\n          [attr.text-anchor]=\"textAnchor\"\n          [attr.transform]=\"textTransform\"\n          [style.font-size]=\"fontSize + 'px'\"\n          [style.font-family]=\"fontFamily\"\n        >\n          {{ tickTrim(tickFormat(tick)) }}\n        </svg:text>\n      </svg:g>\n    </svg:g>\n\n    <svg:g *ngFor=\"let tick of ticks\" [attr.transform]=\"tickTransform(tick)\">\n      <svg:g *ngIf=\"showGridLines\" [attr.transform]=\"gridLineTransform()\">\n        <svg:line class=\"gridline-path gridline-path-vertical\" [attr.y1]=\"-gridLineHeight\" y2=\"0\" />\n      </svg:g>\n    </svg:g>\n  ",
             changeDetection: ChangeDetectionStrategy.OnPush
         })
     ], XAxisTicksComponent);

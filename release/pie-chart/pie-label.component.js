@@ -7,14 +7,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { arc } from 'd3-shape';
 import { trimLabel } from '../common/trim-label.helper';
 var PieLabelComponent = /** @class */ (function () {
     function PieLabelComponent() {
         this.animations = true;
         this.labelTrim = true;
-        this.labelTrimSize = 10;
+        this.labelTrimSize = 16;
         this.isIE = /(edge|msie|trident)/i.test(navigator.userAgent);
         this.trimLabel = trimLabel;
     }
@@ -24,30 +24,30 @@ var PieLabelComponent = /** @class */ (function () {
     PieLabelComponent.prototype.update = function () {
         var startRadius = this.radius;
         if (this.explodeSlices) {
-            startRadius = this.radius * this.value / this.max;
+            startRadius = (this.radius * this.value) / this.max;
         }
         var innerArc = arc()
             .innerRadius(startRadius)
             .outerRadius(startRadius);
         // Calculate innerPos then scale outer position to match label position
         var innerPos = innerArc.centroid(this.data);
-        var scale = this.data.pos[1] / innerPos[1];
-        if (this.data.pos[1] === 0 || innerPos[1] === 0) {
-            scale = 1;
-        }
+        // forced scale
+        var scale = 1.2;
         var outerPos = [scale * innerPos[0], scale * innerPos[1]];
-        this.line = "M" + innerPos + "L" + outerPos + "L" + this.data.pos;
+        // adds small padding to text
+        this.labelPos = [outerPos[0] > 0 ? outerPos[0] + 5 : outerPos[0] - 5, outerPos[1]];
+        this.line = "M" + innerPos + "L" + outerPos + "L" + this.labelPos;
     };
     Object.defineProperty(PieLabelComponent.prototype, "textX", {
         get: function () {
-            return this.data.pos[0];
+            return this.labelPos[0] > 0 ? this.labelPos[0] + 5 : this.labelPos[0] - 3;
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(PieLabelComponent.prototype, "textY", {
         get: function () {
-            return this.data.pos[1];
+            return this.labelPos[1];
         },
         enumerable: true,
         configurable: true
@@ -130,7 +130,7 @@ var PieLabelComponent = /** @class */ (function () {
     PieLabelComponent = __decorate([
         Component({
             selector: 'g[ngx-charts-pie-label]',
-            template: "\n    <title>{{label}}</title>\n    <svg:g\n      [attr.transform]=\"attrTransform\"\n      [style.transform]=\"styleTransform\"\n      [style.transition]=\"textTransition\">\n      <svg:text\n        class=\"pie-label\"\n        [class.animation]=\"animations\"\n        dy=\".35em\"\n        [style.textAnchor]=\"textAnchor()\"\n        [style.shapeRendering]=\"'crispEdges'\"\n        [style.font-size]=\"fontSize + 'px'\"\n        [style.font-family]=\"fontFamily\">\n        {{labelTrim ? trimLabel(label, labelTrimSize) : label}}\n      </svg:text>\n    </svg:g>\n    <svg:path\n      [attr.d]=\"line\"\n      [attr.stroke]=\"color\"\n      fill=\"none\"\n      class=\"pie-label-line line\"\n      [class.animation]=\"animations\">\n    </svg:path>\n  ",
+            template: "\n    <title>{{ label }}</title>\n    <svg:g [attr.transform]=\"attrTransform\" [style.transform]=\"styleTransform\" [style.transition]=\"textTransition\">\n      <svg:text\n        class=\"pie-label\"\n        [class.animation]=\"animations\"\n        dy=\".35em\"\n        [style.textAnchor]=\"textAnchor()\"\n        [style.shapeRendering]=\"'crispEdges'\"\n        [style.font-size]=\"fontSize + 'px'\"\n        [style.font-family]=\"fontFamily\"\n      >\n        {{ labelTrim ? trimLabel(label, labelTrimSize) : label }}\n      </svg:text>\n    </svg:g>\n    <svg:path\n      [attr.d]=\"line\"\n      [attr.stroke]=\"color\"\n      fill=\"none\"\n      class=\"pie-label-line line\"\n      [class.animation]=\"animations\"\n    ></svg:path>\n  ",
             changeDetection: ChangeDetectionStrategy.OnPush
         }),
         __metadata("design:paramtypes", [])

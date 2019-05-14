@@ -16,16 +16,9 @@ export declare class YAxisComponent implements OnChanges {
     referenceLines: any;
     showRefLines: any;
     showRefLabels: any;
-<<<<<<< HEAD
-<<<<<<< HEAD
+    yAxisOffset: number;
     fontFamily: string;
     fontSize: number;
-=======
-    yAxisOffset: number;
->>>>>>> upstream/master
-=======
-    yAxisOffset: number;
->>>>>>> upstream/master
     dimensionsChanged: EventEmitter<{}>;
     yAxisClassName: string;
     tickArguments: any;

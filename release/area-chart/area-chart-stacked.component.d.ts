@@ -37,7 +37,6 @@ export declare class AreaChartStackedComponent extends BaseChartComponent {
     fontFamily: string;
     xAxisFontFamily: string;
     xAxisFontSize: number;
-    xAxisMaxLabelLength: number;
     xAxisLabelRotationAngle: number;
     yAxisFontFamily: string;
     yAxisFontSize: number;

@@ -14,18 +14,11 @@ export declare class PieChartComponent extends BaseChartComponent {
     tooltipDisabled: boolean;
     labelFormatting: any;
     trimLabels: boolean;
-    maxLabelLength: number;
     tooltipText: any;
-<<<<<<< HEAD
-<<<<<<< HEAD
     fontSize: number;
     fontFamily: string;
-=======
+    margins: number[];
     dblclick: EventEmitter<{}>;
->>>>>>> upstream/master
-=======
-    dblclick: EventEmitter<{}>;
->>>>>>> upstream/master
     select: EventEmitter<{}>;
     activate: EventEmitter<any>;
     deactivate: EventEmitter<any>;
@@ -37,7 +30,6 @@ export declare class PieChartComponent extends BaseChartComponent {
     colors: ColorHelper;
     domain: any;
     dims: any;
-    margin: number[];
     legendOptions: any;
     update(): void;
     getDomain(): any[];
@@ -48,17 +40,11 @@ export declare class PieChartComponent extends BaseChartComponent {
         domain: any;
         colors: ColorHelper;
         title: string;
-<<<<<<< HEAD
-<<<<<<< HEAD
+        position: string;
         fontSize: number;
         fontFamily: string;
-=======
-        position: string;
->>>>>>> upstream/master
-=======
-        position: string;
->>>>>>> upstream/master
     };
     onActivate(item: any): void;
     onDeactivate(item: any): void;
+    private hasNoOptionalMarginsSet;
 }

@@ -1,4 +1,4 @@
-import { EventEmitter, OnChanges, ElementRef, SimpleChanges, AfterViewInit } from '@angular/core';
+import { AfterViewInit, ElementRef, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 export declare class XAxisTicksComponent implements OnChanges, AfterViewInit {
     scale: any;
     orient: any;
@@ -11,18 +11,10 @@ export declare class XAxisTicksComponent implements OnChanges, AfterViewInit {
     showGridLines: boolean;
     gridLineHeight: any;
     width: any;
-<<<<<<< HEAD
-<<<<<<< HEAD
+    rotateTicks: boolean;
     fontFamily: string;
     fontSize: number;
-    maxLabelLength: number;
     labelRotationAngle: number;
-=======
-    rotateTicks: boolean;
->>>>>>> upstream/master
-=======
-    rotateTicks: boolean;
->>>>>>> upstream/master
     dimensionsChanged: EventEmitter<{}>;
     verticalSpacing: number;
     rotateLabels: boolean;

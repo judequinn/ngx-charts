@@ -14,16 +14,9 @@ var XAxisComponent = /** @class */ (function () {
         this.rotateTicks = true;
         this.showGridLines = false;
         this.xOrient = 'bottom';
-<<<<<<< HEAD
-<<<<<<< HEAD
+        this.xAxisOffset = 0;
         this.fontFamily = 'initial';
         this.fontSize = 12;
-=======
-        this.xAxisOffset = 0;
->>>>>>> upstream/master
-=======
-        this.xAxisOffset = 0;
->>>>>>> upstream/master
         this.dimensionsChanged = new EventEmitter();
         this.xAxisClassName = 'x axis';
         this.labelOffset = 0;
@@ -107,8 +100,10 @@ var XAxisComponent = /** @class */ (function () {
     ], XAxisComponent.prototype, "xOrient", void 0);
     __decorate([
         Input(),
-<<<<<<< HEAD
-<<<<<<< HEAD
+        __metadata("design:type", Number)
+    ], XAxisComponent.prototype, "xAxisOffset", void 0);
+    __decorate([
+        Input(),
         __metadata("design:type", String)
     ], XAxisComponent.prototype, "fontFamily", void 0);
     __decorate([
@@ -118,19 +113,7 @@ var XAxisComponent = /** @class */ (function () {
     __decorate([
         Input(),
         __metadata("design:type", Number)
-    ], XAxisComponent.prototype, "maxLabelLength", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Number)
     ], XAxisComponent.prototype, "labelRotationAngle", void 0);
-=======
-        __metadata("design:type", Number)
-    ], XAxisComponent.prototype, "xAxisOffset", void 0);
->>>>>>> upstream/master
-=======
-        __metadata("design:type", Number)
-    ], XAxisComponent.prototype, "xAxisOffset", void 0);
->>>>>>> upstream/master
     __decorate([
         Output(),
         __metadata("design:type", Object)
@@ -142,15 +125,7 @@ var XAxisComponent = /** @class */ (function () {
     XAxisComponent = __decorate([
         Component({
             selector: 'g[ngx-charts-x-axis]',
-<<<<<<< HEAD
-<<<<<<< HEAD
-            template: "\n    <svg:g\n      [attr.class]=\"xAxisClassName\"\n      [attr.transform]=\"transform\">\n      <svg:g ngx-charts-x-axis-ticks\n        *ngIf=\"xScale\"\n        [tickFormatting]=\"tickFormatting\"\n        [tickArguments]=\"tickArguments\"\n        [tickStroke]=\"tickStroke\"\n        [scale]=\"xScale\"\n        [orient]=\"xOrient\"\n        [showGridLines]=\"showGridLines\"\n        [gridLineHeight]=\"dims.height\"\n        [width]=\"dims.width\"\n        [tickValues]=\"ticks\"\n        [fontFamily]=\"fontFamily\"\n        [fontSize]=\"fontSize || 12\"\n        [labelRotationAngle]=\"labelRotationAngle\"\n        [maxLabelLength]=\"maxLabelLength\"\n        (dimensionsChanged)=\"emitTicksHeight($event)\"\n      />\n      <svg:g ngx-charts-axis-label\n        *ngIf=\"showLabel\"\n        [label]=\"labelText\"\n        [offset]=\"labelOffset\"\n        [orient]=\"'bottom'\"\n        [height]=\"dims.height\"\n        [width]=\"dims.width\">\n      </svg:g>\n    </svg:g>\n  ",
-=======
-            template: "\n    <svg:g\n      [attr.class]=\"xAxisClassName\"\n      [attr.transform]=\"transform\">\n      <svg:g ngx-charts-x-axis-ticks\n        *ngIf=\"xScale\"\n        [trimTicks]=\"trimTicks\"\n        [rotateTicks]=\"rotateTicks\"\n        [maxTickLength]=\"maxTickLength\"\n        [tickFormatting]=\"tickFormatting\"\n        [tickArguments]=\"tickArguments\"\n        [tickStroke]=\"tickStroke\"\n        [scale]=\"xScale\"\n        [orient]=\"xOrient\"\n        [showGridLines]=\"showGridLines\"\n        [gridLineHeight]=\"dims.height\"\n        [width]=\"dims.width\"\n        [tickValues]=\"ticks\"\n        (dimensionsChanged)=\"emitTicksHeight($event)\"\n      />\n      <svg:g ngx-charts-axis-label\n        *ngIf=\"showLabel\"\n        [label]=\"labelText\"\n        [offset]=\"labelOffset\"\n        [orient]=\"'bottom'\"\n        [height]=\"dims.height\"\n        [width]=\"dims.width\">\n      </svg:g>\n    </svg:g>\n  ",
->>>>>>> upstream/master
-=======
-            template: "\n    <svg:g\n      [attr.class]=\"xAxisClassName\"\n      [attr.transform]=\"transform\">\n      <svg:g ngx-charts-x-axis-ticks\n        *ngIf=\"xScale\"\n        [trimTicks]=\"trimTicks\"\n        [rotateTicks]=\"rotateTicks\"\n        [maxTickLength]=\"maxTickLength\"\n        [tickFormatting]=\"tickFormatting\"\n        [tickArguments]=\"tickArguments\"\n        [tickStroke]=\"tickStroke\"\n        [scale]=\"xScale\"\n        [orient]=\"xOrient\"\n        [showGridLines]=\"showGridLines\"\n        [gridLineHeight]=\"dims.height\"\n        [width]=\"dims.width\"\n        [tickValues]=\"ticks\"\n        (dimensionsChanged)=\"emitTicksHeight($event)\"\n      />\n      <svg:g ngx-charts-axis-label\n        *ngIf=\"showLabel\"\n        [label]=\"labelText\"\n        [offset]=\"labelOffset\"\n        [orient]=\"'bottom'\"\n        [height]=\"dims.height\"\n        [width]=\"dims.width\">\n      </svg:g>\n    </svg:g>\n  ",
->>>>>>> upstream/master
+            template: "\n    <svg:g [attr.class]=\"xAxisClassName\" [attr.transform]=\"transform\">\n      <svg:g\n        ngx-charts-x-axis-ticks\n        *ngIf=\"xScale\"\n        [trimTicks]=\"trimTicks\"\n        [rotateTicks]=\"rotateTicks\"\n        [maxTickLength]=\"maxTickLength\"\n        [tickFormatting]=\"tickFormatting\"\n        [tickArguments]=\"tickArguments\"\n        [tickStroke]=\"tickStroke\"\n        [scale]=\"xScale\"\n        [orient]=\"xOrient\"\n        [showGridLines]=\"showGridLines\"\n        [gridLineHeight]=\"dims.height\"\n        [width]=\"dims.width\"\n        [tickValues]=\"ticks\"\n        [fontFamily]=\"fontFamily\"\n        [fontSize]=\"fontSize || 12\"\n        [labelRotationAngle]=\"labelRotationAngle\"\n        (dimensionsChanged)=\"emitTicksHeight($event)\"\n      />\n      <svg:g\n        ngx-charts-axis-label\n        *ngIf=\"showLabel\"\n        [label]=\"labelText\"\n        [offset]=\"labelOffset\"\n        [orient]=\"'bottom'\"\n        [height]=\"dims.height\"\n        [width]=\"dims.width\"\n      ></svg:g>\n    </svg:g>\n  ",
             changeDetection: ChangeDetectionStrategy.OnPush
         })
     ], XAxisComponent);

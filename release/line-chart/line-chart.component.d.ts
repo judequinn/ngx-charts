@@ -42,7 +42,6 @@ export declare class LineChartComponent extends BaseChartComponent {
     fontFamily: string;
     xAxisFontFamily: string;
     xAxisFontSize: number;
-    xAxisMaxLabelLength: number;
     xAxisLabelRotationAngle: number;
     yAxisFontFamily: string;
     yAxisFontSize: number;
@@ -96,16 +95,9 @@ export declare class LineChartComponent extends BaseChartComponent {
         colors: any;
         domain: any[];
         title: any;
-<<<<<<< HEAD
-<<<<<<< HEAD
+        position: string;
         fontSize: number;
         fontFamily: string;
-=======
-        position: string;
->>>>>>> upstream/master
-=======
-        position: string;
->>>>>>> upstream/master
     };
     updateYAxisWidth({ width }: {
         width: any;

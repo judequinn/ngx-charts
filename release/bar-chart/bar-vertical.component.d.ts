@@ -1,7 +1,7 @@
 import { EventEmitter, TemplateRef } from '@angular/core';
-import { ViewDimensions } from '../common/view-dimensions.helper';
-import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
+import { ColorHelper } from '../common/color.helper';
+import { ViewDimensions } from '../common/view-dimensions.helper';
 export declare class BarVerticalComponent extends BaseChartComponent {
     legend: boolean;
     legendTitle: string;
@@ -31,24 +31,15 @@ export declare class BarVerticalComponent extends BaseChartComponent {
     roundEdges: boolean;
     yScaleMax: number;
     yScaleMin: number;
-<<<<<<< HEAD
-<<<<<<< HEAD
+    showDataLabel: boolean;
+    dataLabelFormatting: any;
     fontSize: number;
     fontFamily: string;
     xAxisFontFamily: string;
     xAxisFontSize: number;
-    xAxisMaxLabelLength: number;
     xAxisLabelRotationAngle: number;
     yAxisFontFamily: string;
     yAxisFontSize: number;
-=======
-    showDataLabel: boolean;
-    dataLabelFormatting: any;
->>>>>>> upstream/master
-=======
-    showDataLabel: boolean;
-    dataLabelFormatting: any;
->>>>>>> upstream/master
     activate: EventEmitter<any>;
     deactivate: EventEmitter<any>;
     tooltipTemplate: TemplateRef<any>;
@@ -76,16 +67,9 @@ export declare class BarVerticalComponent extends BaseChartComponent {
         colors: any;
         domain: any[];
         title: any;
-<<<<<<< HEAD
-<<<<<<< HEAD
+        position: string;
         fontSize: number;
         fontFamily: string;
-=======
-        position: string;
->>>>>>> upstream/master
-=======
-        position: string;
->>>>>>> upstream/master
     };
     updateYAxisWidth({ width }: {
         width: any;

@@ -32,24 +32,15 @@ export declare class BarVertical2DComponent extends BaseChartComponent {
     roundDomains: boolean;
     roundEdges: boolean;
     yScaleMax: number;
-<<<<<<< HEAD
-<<<<<<< HEAD
+    showDataLabel: boolean;
+    dataLabelFormatting: any;
     fontSize: number;
     fontFamily: string;
     xAxisFontFamily: string;
     xAxisFontSize: number;
-    xAxisMaxLabelLength: number;
     xAxisLabelRotationAngle: number;
     yAxisFontFamily: string;
     yAxisFontSize: number;
-=======
-    showDataLabel: boolean;
-    dataLabelFormatting: any;
->>>>>>> upstream/master
-=======
-    showDataLabel: boolean;
-    dataLabelFormatting: any;
->>>>>>> upstream/master
     activate: EventEmitter<any>;
     deactivate: EventEmitter<any>;
     tooltipTemplate: TemplateRef<any>;
@@ -84,16 +75,9 @@ export declare class BarVertical2DComponent extends BaseChartComponent {
         colors: any;
         domain: any[];
         title: any;
-<<<<<<< HEAD
-<<<<<<< HEAD
+        position: string;
         fontSize: number;
         fontFamily: string;
-=======
-        position: string;
->>>>>>> upstream/master
-=======
-        position: string;
->>>>>>> upstream/master
     };
     updateYAxisWidth({ width }: {
         width: any;

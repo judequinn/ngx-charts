@@ -38,29 +38,31 @@ var PieChartComponent = /** @class */ (function (_super) {
         _this.activeEntries = [];
         _this.tooltipDisabled = false;
         _this.trimLabels = true;
-        _this.maxLabelLength = 10;
         _this.dblclick = new EventEmitter();
         _this.select = new EventEmitter();
         _this.activate = new EventEmitter();
         _this.deactivate = new EventEmitter();
-        _this.margin = [20, 20, 20, 20];
         return _this;
     }
     PieChartComponent.prototype.update = function () {
         var _this = this;
         _super.prototype.update.call(this);
-        if (this.labels) {
-            this.margin = [30, 80, 30, 80];
+        if (this.labels && this.hasNoOptionalMarginsSet()) {
+            this.margins = [30, 80, 30, 80];
+        }
+        else if (!this.labels && this.hasNoOptionalMarginsSet()) {
+            // default value for margins
+            this.margins = [20, 20, 20, 20];
         }
         this.dims = calculateViewDimensions({
             width: this.width,
             height: this.height,
-            margins: this.margin,
+            margins: this.margins,
             showLegend: this.legend,
             legendPosition: this.legendPosition
         });
-        var xOffset = this.margin[3] + this.dims.width / 2;
-        var yOffset = this.margin[0] + this.dims.height / 2;
+        var xOffset = this.margins[3] + this.dims.width / 2;
+        var yOffset = this.margins[0] + this.dims.height / 2;
         this.translation = "translate(" + xOffset + ", " + yOffset + ")";
         this.outerRadius = Math.min(this.dims.width, this.dims.height);
         if (this.labels) {
@@ -110,16 +112,9 @@ var PieChartComponent = /** @class */ (function (_super) {
             domain: this.domain,
             colors: this.colors,
             title: this.legendTitle,
-<<<<<<< HEAD
-<<<<<<< HEAD
+            position: this.legendPosition,
             fontSize: this.fontSize,
             fontFamily: this.fontFamily
-=======
-            position: this.legendPosition
->>>>>>> upstream/master
-=======
-            position: this.legendPosition
->>>>>>> upstream/master
         };
     };
     PieChartComponent.prototype.onActivate = function (item) {
@@ -139,6 +134,9 @@ var PieChartComponent = /** @class */ (function (_super) {
         this.activeEntries.splice(idx, 1);
         this.activeEntries = this.activeEntries.slice();
         this.deactivate.emit({ value: item, entries: this.activeEntries });
+    };
+    PieChartComponent.prototype.hasNoOptionalMarginsSet = function () {
+        return !this.margins || this.margins.length <= 0;
     };
     __decorate([
         Input(),
@@ -190,10 +188,6 @@ var PieChartComponent = /** @class */ (function (_super) {
     ], PieChartComponent.prototype, "trimLabels", void 0);
     __decorate([
         Input(),
-        __metadata("design:type", Number)
-    ], PieChartComponent.prototype, "maxLabelLength", void 0);
-    __decorate([
-        Input(),
         __metadata("design:type", Object)
     ], PieChartComponent.prototype, "tooltipText", void 0);
     __decorate([
@@ -205,9 +199,9 @@ var PieChartComponent = /** @class */ (function (_super) {
         __metadata("design:type", String)
     ], PieChartComponent.prototype, "fontFamily", void 0);
     __decorate([
-        Output(),
-        __metadata("design:type", Object)
-    ], PieChartComponent.prototype, "dblclick", void 0);
+        Input(),
+        __metadata("design:type", Array)
+    ], PieChartComponent.prototype, "margins", void 0);
     __decorate([
         Output(),
         __metadata("design:type", Object)
@@ -231,19 +225,8 @@ var PieChartComponent = /** @class */ (function (_super) {
     PieChartComponent = __decorate([
         Component({
             selector: 'ngx-charts-pie-chart',
-<<<<<<< HEAD
-<<<<<<< HEAD
-            template: "\n    <ngx-charts-chart\n      [view]=\"[width, height]\"\n      [showLegend]=\"legend\"\n      [legendOptions]=\"legendOptions\"\n      [activeEntries]=\"activeEntries\"\n      [animations]=\"animations\"\n      (legendLabelActivate)=\"onActivate($event)\"\n      (legendLabelDeactivate)=\"onDeactivate($event)\"\n      (legendLabelClick)=\"onClick($event)\">\n      <svg:g [attr.transform]=\"translation\" class=\"pie-chart chart\">\n        <svg:g ngx-charts-pie-series\n          [colors]=\"colors\"\n          [series]=\"data\"\n          [showLabels]=\"labels\"\n          [labelFormatting]=\"labelFormatting\"\n          [trimLabels]=\"trimLabels\"\n          [maxLabelLength]=\"maxLabelLength\"\n          [activeEntries]=\"activeEntries\"\n          [innerRadius]=\"innerRadius\"\n          [outerRadius]=\"outerRadius\"\n          [explodeSlices]=\"explodeSlices\"\n          [gradient]=\"gradient\"\n          [animations]=\"animations\"\n          [tooltipDisabled]=\"tooltipDisabled\"\n          [tooltipTemplate]=\"tooltipTemplate\"\n          [tooltipText]=\"tooltipText\"\n          [tooltipFontFamily]=\"fontFamily\"\n          [tooltipFontSize]=\"fontSize\"\n          (select)=\"onClick($event)\"\n          (activate)=\"onActivate($event)\"\n          (deactivate)=\"onDeactivate($event)\"\n        />\n      </svg:g>\n    </ngx-charts-chart>\n  ",
-=======
-            template: "\n    <ngx-charts-chart\n      [view]=\"[width, height]\"\n      [showLegend]=\"legend\"\n      [legendOptions]=\"legendOptions\"\n      [activeEntries]=\"activeEntries\"\n      [animations]=\"animations\"\n      (legendLabelActivate)=\"onActivate($event)\"\n      (legendLabelDeactivate)=\"onDeactivate($event)\"\n      (legendLabelClick)=\"onClick($event)\">\n      <svg:g [attr.transform]=\"translation\" class=\"pie-chart chart\">\n        <svg:g ngx-charts-pie-series\n          [colors]=\"colors\"\n          [series]=\"data\"\n          [showLabels]=\"labels\"\n          [labelFormatting]=\"labelFormatting\"\n          [trimLabels]=\"trimLabels\"\n          [maxLabelLength]=\"maxLabelLength\"\n          [activeEntries]=\"activeEntries\"\n          [innerRadius]=\"innerRadius\"\n          [outerRadius]=\"outerRadius\"\n          [explodeSlices]=\"explodeSlices\"\n          [gradient]=\"gradient\"\n          [animations]=\"animations\"\n          [tooltipDisabled]=\"tooltipDisabled\"\n          [tooltipTemplate]=\"tooltipTemplate\"\n          [tooltipText]=\"tooltipText\"\n          (dblclick)=\"dblclick.emit($event)\"\n          (select)=\"onClick($event)\"\n          (activate)=\"onActivate($event)\"\n          (deactivate)=\"onDeactivate($event)\"\n        />\n      </svg:g>\n    </ngx-charts-chart>\n  ",
->>>>>>> upstream/master
-=======
-            template: "\n    <ngx-charts-chart\n      [view]=\"[width, height]\"\n      [showLegend]=\"legend\"\n      [legendOptions]=\"legendOptions\"\n      [activeEntries]=\"activeEntries\"\n      [animations]=\"animations\"\n      (legendLabelActivate)=\"onActivate($event)\"\n      (legendLabelDeactivate)=\"onDeactivate($event)\"\n      (legendLabelClick)=\"onClick($event)\">\n      <svg:g [attr.transform]=\"translation\" class=\"pie-chart chart\">\n        <svg:g ngx-charts-pie-series\n          [colors]=\"colors\"\n          [series]=\"data\"\n          [showLabels]=\"labels\"\n          [labelFormatting]=\"labelFormatting\"\n          [trimLabels]=\"trimLabels\"\n          [maxLabelLength]=\"maxLabelLength\"\n          [activeEntries]=\"activeEntries\"\n          [innerRadius]=\"innerRadius\"\n          [outerRadius]=\"outerRadius\"\n          [explodeSlices]=\"explodeSlices\"\n          [gradient]=\"gradient\"\n          [animations]=\"animations\"\n          [tooltipDisabled]=\"tooltipDisabled\"\n          [tooltipTemplate]=\"tooltipTemplate\"\n          [tooltipText]=\"tooltipText\"\n          (dblclick)=\"dblclick.emit($event)\"\n          (select)=\"onClick($event)\"\n          (activate)=\"onActivate($event)\"\n          (deactivate)=\"onDeactivate($event)\"\n        />\n      </svg:g>\n    </ngx-charts-chart>\n  ",
->>>>>>> upstream/master
-            styleUrls: [
-                '../common/base-chart.component.css',
-                './pie-chart.component.css'
-            ],
+            template: "\n    <ngx-charts-chart\n      [view]=\"[width, height]\"\n      [showLegend]=\"legend\"\n      [legendOptions]=\"legendOptions\"\n      [activeEntries]=\"activeEntries\"\n      [animations]=\"animations\"\n      (legendLabelActivate)=\"onActivate($event)\"\n      (legendLabelDeactivate)=\"onDeactivate($event)\"\n      (legendLabelClick)=\"onClick($event)\"\n    >\n      <svg:g [attr.transform]=\"translation\" class=\"pie-chart chart\">\n        <svg:g\n          ngx-charts-pie-series\n          [colors]=\"colors\"\n          [series]=\"data\"\n          [showLabels]=\"labels\"\n          [labelFormatting]=\"labelFormatting\"\n          [trimLabels]=\"trimLabels\"\n          [activeEntries]=\"activeEntries\"\n          [innerRadius]=\"innerRadius\"\n          [outerRadius]=\"outerRadius\"\n          [explodeSlices]=\"explodeSlices\"\n          [gradient]=\"gradient\"\n          [animations]=\"animations\"\n          [tooltipDisabled]=\"tooltipDisabled\"\n          [tooltipTemplate]=\"tooltipTemplate\"\n          [tooltipText]=\"tooltipText\"\n          [tooltipFontFamily]=\"fontFamily\"\n          (dblclick)=\"dblclick.emit($event)\"\n          [tooltipFontSize]=\"fontSize\"\n          (select)=\"onClick($event)\"\n          (activate)=\"onActivate($event)\"\n          (deactivate)=\"onDeactivate($event)\"\n        />\n      </svg:g>\n    </ngx-charts-chart>\n  ",
+            styleUrls: ['../common/base-chart.component.css', './pie-chart.component.css'],
             encapsulation: ViewEncapsulation.None,
             changeDetection: ChangeDetectionStrategy.OnPush
         })

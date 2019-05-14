@@ -14,6 +14,7 @@ export declare class PieLabelComponent implements OnChanges {
     fontFamily: string;
     trimLabel: (label: string, max?: number) => string;
     line: string;
+    labelPos: any;
     private readonly isIE;
     constructor();
     ngOnChanges(changes: SimpleChanges): void;

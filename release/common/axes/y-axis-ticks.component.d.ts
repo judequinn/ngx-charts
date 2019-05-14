@@ -1,4 +1,4 @@
-import { OnChanges, ElementRef, EventEmitter, AfterViewInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ElementRef, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 export declare class YAxisTicksComponent implements OnChanges, AfterViewInit {
     scale: any;
     orient: any;

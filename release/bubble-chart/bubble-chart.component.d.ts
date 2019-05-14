@@ -36,7 +36,6 @@ export declare class BubbleChartComponent extends BaseChartComponent {
     fontFamily: string;
     xAxisFontFamily: string;
     xAxisFontSize: number;
-    xAxisMaxLabelLength: number;
     xAxisLabelRotationAngle: number;
     yAxisFontFamily: string;
     yAxisFontSize: number;

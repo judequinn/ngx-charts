@@ -1,4 +1,4 @@
-import { SimpleChanges, EventEmitter, OnChanges, TemplateRef } from '@angular/core';
+import { EventEmitter, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
 export declare class PieSeriesComponent implements OnChanges {
     colors: any;
     series: any;
