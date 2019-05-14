@@ -1,16 +1,12 @@
-import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { arc } from 'd3-shape';
-
 import { trimLabel } from '../common/trim-label.helper';
 
 @Component({
   selector: 'g[ngx-charts-pie-label]',
   template: `
-    <title>{{label}}</title>
-    <svg:g
-      [attr.transform]="attrTransform"
-      [style.transform]="styleTransform"
-      [style.transition]="textTransition">
+    <title>{{ label }}</title>
+    <svg:g [attr.transform]="attrTransform" [style.transform]="styleTransform" [style.transition]="textTransition">
       <svg:text
         class="pie-label"
         [class.animation]="animations"
@@ -18,8 +14,9 @@ import { trimLabel } from '../common/trim-label.helper';
         [style.textAnchor]="textAnchor()"
         [style.shapeRendering]="'crispEdges'"
         [style.font-size]="fontSize + 'px'"
-        [style.font-family]="fontFamily">
-        {{labelTrim ? trimLabel(label, labelTrimSize) : label}}
+        [style.font-family]="fontFamily"
+      >
+        {{ labelTrim ? trimLabel(label, labelTrimSize) : label }}
       </svg:text>
     </svg:g>
     <svg:path
@@ -27,8 +24,8 @@ import { trimLabel } from '../common/trim-label.helper';
       [attr.stroke]="color"
       fill="none"
       class="pie-label-line line"
-      [class.animation]="animations">
-    </svg:path>
+      [class.animation]="animations"
+    ></svg:path>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -42,12 +39,14 @@ export class PieLabelComponent implements OnChanges {
   @Input() explodeSlices;
   @Input() animations: boolean = true;
   @Input() labelTrim: boolean = true;
-  @Input() labelTrimSize: number = 10;
+  @Input() labelTrimSize: number = 16;
   @Input() fontSize: number;
   @Input() fontFamily: string;
 
   trimLabel: (label: string, max?: number) => string;
   line: string;
+
+  labelPos: any;
 
   private readonly isIE = /(edge|msie|trident)/i.test(navigator.userAgent);
 
@@ -62,7 +61,7 @@ export class PieLabelComponent implements OnChanges {
   update(): void {
     let startRadius = this.radius;
     if (this.explodeSlices) {
-      startRadius = this.radius * this.value / this.max;
+      startRadius = (this.radius * this.value) / this.max;
     }
 
     const innerArc = arc()
@@ -72,21 +71,22 @@ export class PieLabelComponent implements OnChanges {
     // Calculate innerPos then scale outer position to match label position
     const innerPos = innerArc.centroid(this.data);
 
-    let scale = this.data.pos[1] / innerPos[1];
-    if (this.data.pos[1] === 0 || innerPos[1] === 0) {
-      scale = 1;
-    }
-    const outerPos = [scale * innerPos[0], scale * innerPos[1]];
+    // forced scale
+    const scale = 1.2;
 
-    this.line = `M${innerPos}L${outerPos}L${this.data.pos}`;
+    const outerPos = [scale * innerPos[0], scale * innerPos[1]];
+    // adds small padding to text
+    this.labelPos = [outerPos[0] > 0 ? outerPos[0] + 5 : outerPos[0] - 5, outerPos[1]];
+
+    this.line = `M${innerPos}L${outerPos}L${this.labelPos}`;
   }
 
   get textX(): number {
-    return this.data.pos[0];
+    return this.labelPos[0] > 0 ? this.labelPos[0] + 5 : this.labelPos[0] - 3;
   }
 
   get textY(): number {
-    return this.data.pos[1];
+    return this.labelPos[1];
   }
 
   get styleTransform(): string {

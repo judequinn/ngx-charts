@@ -1,28 +1,22 @@
 import {
-  Component, Input, OnChanges, ViewContainerRef, ChangeDetectionStrategy, EventEmitter,
-  Output, SimpleChanges
+  Component,
+  Input,
+  OnChanges,
+  ViewContainerRef,
+  ChangeDetectionStrategy,
+  EventEmitter,
+  Output,
+  SimpleChanges
 } from '@angular/core';
-import {
-  trigger,
-  style,
-  animate,
-  transition
-} from '@angular/animations';
+import { trigger, style, animate, transition } from '@angular/animations';
 import { TooltipService } from '../tooltip';
 
 @Component({
   providers: [TooltipService],
   selector: 'ngx-charts-chart',
   template: `
-    <div
-      class="ngx-charts-outer"
-      [style.width.px]="view[0]"
-      [@animationState]="'active'"
-      [@.disabled]="!animations">
-      <svg
-        class="ngx-charts"
-        [attr.width]="chartWidth"
-        [attr.height]="view[1]">
+    <div class="ngx-charts-outer" [style.width.px]="view[0]" [@animationState]="'active'" [@.disabled]="!animations">
+      <svg class="ngx-charts" [attr.width]="chartWidth" [attr.height]="view[1]">
         <ng-content></ng-content>
       </svg>
       <ngx-charts-scale-legend
@@ -32,7 +26,8 @@ import { TooltipService } from '../tooltip';
         [valueRange]="legendOptions.domain"
         [colors]="legendOptions.colors"
         [height]="view[1]"
-        [width]="legendWidth">
+        [width]="legendWidth"
+      >
       </ngx-charts-scale-legend>
       <ngx-charts-legend
         *ngIf="showLegend && legendType === 'legend'"
@@ -48,22 +43,19 @@ import { TooltipService } from '../tooltip';
         [fontSize]="legendOptions.fontSize"
         (labelClick)="legendLabelClick.emit($event)"
         (labelActivate)="legendLabelActivate.emit($event)"
-        (labelDeactivate)="legendLabelDeactivate.emit($event)">
+        (labelDeactivate)="legendLabelDeactivate.emit($event)"
+      >
       </ngx-charts-legend>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('animationState', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('500ms 100ms', style({ opacity: 1 }))
-      ])
+      transition(':enter', [style({ opacity: 0 }), animate('500ms 100ms', style({ opacity: 1 }))])
     ])
   ]
 })
 export class ChartComponent implements OnChanges {
-
   @Input() view;
   @Input() showLegend = false;
   @Input() legendOptions: any;
@@ -86,9 +78,7 @@ export class ChartComponent implements OnChanges {
   title: any;
   legendWidth: any;
 
-  constructor(
-    private vcr: ViewContainerRef,
-    private tooltipService: TooltipService) {
+  constructor(private vcr: ViewContainerRef, private tooltipService: TooltipService) {
     this.tooltipService.injectionService.setRootViewContainer(this.vcr);
   }
 
@@ -103,19 +93,20 @@ export class ChartComponent implements OnChanges {
 
       if (!this.legendOptions || this.legendOptions.position === 'right') {
         if (this.legendType === 'scaleLegend') {
-          legendColumns = 1;
-        } else {
           legendColumns = 2;
+        } else {
+          legendColumns = 3;
         }
       }
     }
 
     const chartColumns = 12 - legendColumns;
 
-    this.chartWidth = Math.floor((this.view[0] * chartColumns / 12.0));
-    this.legendWidth = (!this.legendOptions || this.legendOptions.position === 'right')
-      ? Math.floor((this.view[0] * legendColumns / 12.0))
-      : this.chartWidth;
+    this.chartWidth = Math.floor((this.view[0] * chartColumns) / 12.0);
+    this.legendWidth =
+      !this.legendOptions || this.legendOptions.position === 'right'
+        ? Math.floor((this.view[0] * legendColumns) / 12.0)
+        : this.chartWidth;
   }
 
   getLegendType(): string {
@@ -125,5 +116,4 @@ export class ChartComponent implements OnChanges {
       return 'legend';
     }
   }
-
 }

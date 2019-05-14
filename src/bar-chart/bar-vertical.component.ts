@@ -1,18 +1,17 @@
 import {
-  Component,
-  Input,
-  ViewEncapsulation,
-  Output,
-  EventEmitter,
   ChangeDetectionStrategy,
+  Component,
   ContentChild,
-  TemplateRef
+  EventEmitter,
+  Input,
+  Output,
+  TemplateRef,
+  ViewEncapsulation
 } from '@angular/core';
 import { scaleBand, scaleLinear } from 'd3-scale';
-
-import { calculateViewDimensions, ViewDimensions } from '../common/view-dimensions.helper';
-import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
+import { ColorHelper } from '../common/color.helper';
+import { calculateViewDimensions, ViewDimensions } from '../common/view-dimensions.helper';
 
 @Component({
   selector: 'ngx-charts-bar-vertical',
@@ -150,7 +149,7 @@ export class BarVerticalComponent extends BaseChartComponent {
 
   update(): void {
     super.update();
-   
+
     if (!this.showDataLabel) {
       this.dataLabelMaxHeight = { negative: 0, positive: 0 };
     }
@@ -258,17 +257,6 @@ export class BarVerticalComponent extends BaseChartComponent {
   updateXAxisHeight({ height }): void {
     this.xAxisHeight = height;
     this.update();
-  }
-  
-  onDataLabelMaxHeightChanged(event) {      
-    if (event.size.negative)  {
-      this.dataLabelMaxHeight.negative = Math.max(this.dataLabelMaxHeight.negative, event.size.height);
-    } else {
-      this.dataLabelMaxHeight.positive = Math.max(this.dataLabelMaxHeight.positive, event.size.height);
-    }      
-    if (event.index === (this.results.length - 1)) {
-      setTimeout(() => this.update());
-    }      
   }
 
   onDataLabelMaxHeightChanged(event) {

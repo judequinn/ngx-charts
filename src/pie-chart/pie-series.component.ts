@@ -1,23 +1,23 @@
 import {
-  Component,
-  SimpleChanges,
-  Input,
-  Output,
-  EventEmitter,
-  OnChanges,
   ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
   TemplateRef
 } from '@angular/core';
 import { max } from 'd3-array';
 import { arc, pie } from 'd3-shape';
-
 import { formatLabel } from '../common/label.helper';
 
 @Component({
   selector: 'g[ngx-charts-pie-series]',
   template: `
-    <svg:g *ngFor="let arc of data; trackBy:trackBy">
-      <svg:g ngx-charts-pie-label
+    <svg:g *ngFor="let arc of data; trackBy: trackBy">
+      <svg:g
+        ngx-charts-pie-label
         *ngIf="labelVisible(arc)"
         [data]="arc"
         [radius]="outerRadius"
@@ -30,8 +30,8 @@ import { formatLabel } from '../common/label.helper';
         [explodeSlices]="explodeSlices"
         [animations]="animations"
         [fontFamily]="tooltipFontFamily"
-        [fontSize]="tooltipFontSize">
-      </svg:g>
+        [fontSize]="tooltipFontSize"
+      ></svg:g>
       <svg:g
         ngx-charts-pie-arc
         [startAngle]="arc.startAngle"
@@ -58,8 +58,8 @@ import { formatLabel } from '../common/label.helper';
         [tooltipTemplate]="tooltipTemplate"
         [tooltipContext]="arc.data"
         [tooltipFontFamily]="tooltipFontFamily"
-        [tooltipFontSize]="tooltipFontSize">
-      </svg:g>
+        [tooltipFontSize]="tooltipFontSize"
+      ></svg:g>
     </svg:g>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -76,7 +76,7 @@ export class PieSeriesComponent implements OnChanges {
   @Input() activeEntries: any[];
   @Input() labelFormatting: any;
   @Input() trimLabels: boolean = true;
-  @Input() maxLabelLength: number = 10;
+  @Input() maxLabelLength: number = 16;
   @Input() tooltipText: (o: any) => any;
   @Input() tooltipDisabled: boolean = false;
   @Input() tooltipTemplate: TemplateRef<any>;
