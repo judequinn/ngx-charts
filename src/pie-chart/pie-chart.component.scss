@@ -1,9 +1,9 @@
 .pie-label {
-  font-size: 11px;
+  font-size: 13px;
 
   &.animation {
     animation: 750ms ease-in fadeIn;
-  
+
     @keyframes fadeIn {
       from {
         opacity: 0;
