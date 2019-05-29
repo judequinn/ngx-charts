@@ -12469,7 +12469,7 @@ var PieLabelComponent = /** @class */ (function () {
         // Calculate innerPos then scale outer position to match label position
         var innerPos = innerArc.centroid(this.data);
         // forced scale
-        var scale = 1.2;
+        var scale = 1.05;
         var outerPos = [scale * innerPos[0], scale * innerPos[1]];
         // adds small padding to text
         this.labelPos = [outerPos[0] > 0 ? outerPos[0] + 5 : outerPos[0] - 5, outerPos[1]];
@@ -13256,7 +13256,7 @@ var PieSeriesComponent = /** @class */ (function () {
         this.innerRadius = 60;
         this.outerRadius = 80;
         this.trimLabels = true;
-        this.maxLabelLength = 16;
+        this.maxLabelLength = 12;
         this.tooltipDisabled = false;
         this.animations = true;
         this.select = new EventEmitter();

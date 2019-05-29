@@ -32,7 +32,7 @@ var PieLabelComponent = /** @class */ (function () {
         // Calculate innerPos then scale outer position to match label position
         var innerPos = innerArc.centroid(this.data);
         // forced scale
-        var scale = 1.2;
+        var scale = 1.05;
         var outerPos = [scale * innerPos[0], scale * innerPos[1]];
         // adds small padding to text
         this.labelPos = [outerPos[0] > 0 ? outerPos[0] + 5 : outerPos[0] - 5, outerPos[1]];

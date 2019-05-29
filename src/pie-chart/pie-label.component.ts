@@ -72,7 +72,7 @@ export class PieLabelComponent implements OnChanges {
     const innerPos = innerArc.centroid(this.data);
 
     // forced scale
-    const scale = 1.2;
+    const scale = 1.05;
 
     const outerPos = [scale * innerPos[0], scale * innerPos[1]];
     // adds small padding to text
